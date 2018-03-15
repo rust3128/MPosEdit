@@ -2,6 +2,7 @@
 #define LOGINDIALOG_H
 
 #include <QDialog>
+#include <QSqlTableModel>
 
 namespace Ui {
 class LoginDialog;
@@ -16,7 +17,10 @@ public:
     ~LoginDialog();
 
 private:
+    void createUI();
+private:
     Ui::LoginDialog *ui;
+    QSqlTableModel *modelUsers;         //Модель таблицы пользователя
 };
 
 #endif // LOGINDIALOG_H
