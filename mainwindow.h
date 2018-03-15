@@ -14,6 +14,10 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void show();
+
+private:
+    void showLoginDialog();             //Отображение Диалога пользователя
 
 private:
     Ui::MainWindow *ui;
