@@ -53,13 +53,13 @@
       <enum>QLayout::SetMinimumSize</enum>
      </property>
      <item row="0" column="0">
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="comboBoxUser"/>
      </item>
      <item row="1" column="0">
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="lineEditPass"/>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="labelInfo">
        <property name="text">
         <string>TextLabel</string>
        </property>
