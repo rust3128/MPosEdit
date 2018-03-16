@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSqlRecord>
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -18,9 +20,13 @@ public:
 
 private:
     void showLoginDialog();             //Отображение Диалога пользователя
+    void createStatusBar();             //Создание строки состояния
+    void sendUser2StatusBar();          //Отображение пользователя в строке состояния
 
 private:
     Ui::MainWindow *ui;
+    QSqlRecord currentUser;             //Текущий пользователь
+    QSqlRecord centralDBInfo;           //Данные для подключения к центральной базе
 };
 
 #endif // MAINWINDOW_H

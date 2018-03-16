@@ -24,7 +24,7 @@ bool createOptionsTables()
                "user_fio VARCHAR(50) NOT NULL, "
                "user_pass VARCHAR(50) NOT NULL)";
     listSQL << "INSERT INTO `users`(`user_name`,`user_fio`,`user_pass`) "
-               "VALUES ('Admin','Администратор А.А.','defrag')";
+               "VALUES ('Администратор','Администратор А.А.','defrag')";
     ///Создание таблицы подключений
     listSQL << "CREATE TABLE `connections` ( "
                "`conn_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
