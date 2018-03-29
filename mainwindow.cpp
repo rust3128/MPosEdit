@@ -2,7 +2,9 @@
 #include "ui_mainwindow.h"
 #include "logindialog.h"
 #include "loggingcategories.h"
+#include "connectioneditdialog.h"
 #include <QMessageBox>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,6 +36,7 @@ void MainWindow::showLoginDialog()
     if(loginDlg->result()==QDialog::Accepted){
         currentUser = loginDlg->getUserData();
         sendUser2StatusBar();
+        connCentralDB();
     } else {
         QMessageBox::critical(this,"Ошибка входа",
                               "Не выполнен вход в систему!<br>Дальнейшая работа не возможна.");
@@ -56,4 +59,33 @@ void MainWindow::sendUser2StatusBar()
 {
     ui->labelUser->setText("Пользователь: "+currentUser.value("user_fio").toString());
     ui->labelUser->show();
+}
+
+void MainWindow::connCentralDB()
+{
+    QSqlDatabase dblite = QSqlDatabase::database("QSQLITE","options");
+    modelConnect = new QSqlTableModel(this,dblite);
+
+    modelConnect->setTable("connections");
+    modelConnect->select();
+
+    switch (modelConnect->rowCount()) {
+    case 0:
+        //Создание нового подключения
+        addNewConnection();
+        break;
+    case 1:
+        //Единственное подключение
+        break;
+    default:
+        break;
+    }
+
+}
+
+void MainWindow::addNewConnection()
+{
+    ConnectionEditDialog *connNewDlg = new ConnectionEditDialog(-1);
+    connNewDlg->move(this->geometry().center().x() - connNewDlg->geometry().center().x(), this->geometry().center().y() - connNewDlg->geometry().center().y());
+    connNewDlg->exec();
 }

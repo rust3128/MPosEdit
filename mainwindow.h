@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSqlRecord>
 #include <QLabel>
+#include <QSqlTableModel>
 
 namespace Ui {
 class MainWindow;
@@ -22,11 +23,14 @@ private:
     void showLoginDialog();             //Отображение Диалога пользователя
     void createStatusBar();             //Создание строки состояния
     void sendUser2StatusBar();          //Отображение пользователя в строке состояния
+    void connCentralDB();               //Подключение к цетральной базе
+    void addNewConnection();            //Создание нового подключения
 
 private:
     Ui::MainWindow *ui;
     QSqlRecord currentUser;             //Текущий пользователь
     QSqlRecord centralDBInfo;           //Данные для подключения к центральной базе
+    QSqlTableModel *modelConnect;        //Модель подключений
 };
 
 #endif // MAINWINDOW_H

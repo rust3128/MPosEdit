@@ -32,7 +32,8 @@ bool createOptionsTables()
                "`conn_host`	varchar(50) NOT NULL, "
                "`conn_db`	VARCHAR(100) NOT NULL, "
                "`conn_user`	INTEGER NOT NULL, "
-               "`conn_pass`	INTEGER NOT NULL)";
+               "`conn_pass`	INTEGER NOT NULL,"
+               "`conn_curr` INTEGER NOT NULL)";
 
     QSqlDatabase dblite = QSqlDatabase::database("options");
     QSqlQuery q = QSqlQuery(dblite);

@@ -27,17 +27,20 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     loggingcategories.cpp \
-    logindialog.cpp
+    logindialog.cpp \
+    connectioneditdialog.cpp
 
 HEADERS += \
         mainwindow.h \
     loggingcategories.h \
     logindialog.h \
-    databaseoption.h
+    databaseoption.h \
+    connectioneditdialog.h
 
 FORMS += \
         mainwindow.ui \
-    logindialog.ui
+    logindialog.ui \
+    connectioneditdialog.ui
 
 RESOURCES += \
     resourse.qrc

@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>Image/users.png</file>
         <file>Image/logo.ico</file>
+        <file>Image/adddatabase.png</file>
     </qresource>
 </RCC>
