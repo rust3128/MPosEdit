@@ -136,14 +136,10 @@ void MainWindow::modelsCreate()
     modelTerminals->setQuery("SELECT t.TERMINAL_ID, TRIM(t.NAME) FROM TERMINALS t "
                              "WHERE t.TERMINALTYPE=3 and t.ISACTIVE='T' "
                              "ORDER BY t.TERMINAL_ID",dbcenter);
-
-
     QTableView *tv = new QTableView(this);
     tv->setModel(modelTerminals);
-//    tv->horizontalHeader()->hide();
+    tv->horizontalHeader()->hide();
     tv->verticalHeader()->hide();
-
-    tv->setBaseSize(200,100);
 
     tv->resizeColumnsToContents();
     tv->verticalHeader()->setDefaultSectionSize(tv->verticalHeader()->minimumSectionSize());
