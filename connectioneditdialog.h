@@ -14,6 +14,8 @@ class ConnectionEditDialog : public QDialog
 public:
     explicit ConnectionEditDialog(int id, QWidget *parent = 0);
     ~ConnectionEditDialog();
+signals:
+    void sendConnectionName(QString);
 
 private slots:
     void on_pushButtonCansel_clicked();
@@ -22,6 +24,7 @@ private slots:
 private:
     void addNewConnection();        //Новое подключение
     bool validateData();            //Проверка заполнения формы
+    bool connectCentralDB();        //Подключение к центрально базе данных
 
 private:
     Ui::ConnectionEditDialog *ui;
