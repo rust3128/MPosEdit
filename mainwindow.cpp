@@ -3,6 +3,7 @@
 #include "logindialog.h"
 #include "loggingcategories.h"
 #include "connectioneditdialog.h"
+#include "clearsaleordersdialog.h"
 #include <QMessageBox>
 #include <QDebug>
 #include <QSqlError>
@@ -13,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->resize(1600,900);
+    this->resize(1024,768);
     createStatusBar();
 }
 
@@ -92,7 +93,6 @@ void MainWindow::selectCentralDB()
     default:
         break;
     }
-    modelsCreate();
 }
 
 void MainWindow::addNewConnection()
@@ -129,28 +129,11 @@ void MainWindow::connCentralDB(int connID)
 }
 
 
-void MainWindow::modelsCreate()
+
+void MainWindow::on_actionClearSaleorders_triggered()
 {
-    QSqlDatabase dbcenter = QSqlDatabase::database("central");
-    modelTerminals = new QSqlQueryModel();
-    modelTerminals->setQuery("SELECT t.TERMINAL_ID, TRIM(t.NAME) FROM TERMINALS t "
-                             "WHERE t.TERMINALTYPE=3 and t.ISACTIVE='T' "
-                             "ORDER BY t.TERMINAL_ID",dbcenter);
-    QTableView *tv = new QTableView(this);
-    tv->setModel(modelTerminals);
-    tv->horizontalHeader()->hide();
-    tv->verticalHeader()->hide();
-
-    tv->resizeColumnsToContents();
-    tv->verticalHeader()->setDefaultSectionSize(tv->verticalHeader()->minimumSectionSize());
-    tv->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    tv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    tv->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    ui->comboBox->setModel(modelTerminals);
-    ui->comboBox->setView(tv);
-
-
-
-
+    ClearSaleordersDialog *clearSaleordersDlg = new ClearSaleordersDialog();
+    this->setCentralWidget(clearSaleordersDlg);
+    this->setWindowTitle(this->windowTitle()+" Удаление продаж");
+    clearSaleordersDlg->exec();
 }

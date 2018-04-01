@@ -28,19 +28,25 @@ SOURCES += \
         mainwindow.cpp \
     loggingcategories.cpp \
     logindialog.cpp \
-    connectioneditdialog.cpp
+    connectioneditdialog.cpp \
+    clearsaleordersdialog.cpp
 
 HEADERS += \
         mainwindow.h \
     loggingcategories.h \
     logindialog.h \
     databaseoption.h \
-    connectioneditdialog.h
+    connectioneditdialog.h \
+    clearsaleordersdialog.h
 
 FORMS += \
         mainwindow.ui \
     logindialog.ui \
-    connectioneditdialog.ui
+    connectioneditdialog.ui \
+    clearsaleordersdialog.ui
 
 RESOURCES += \
     resourse.qrc
+
+DISTFILES += \
+    notepad

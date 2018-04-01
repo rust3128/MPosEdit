@@ -1,0 +1,31 @@
+QSqlDatabase dbcenter = QSqlDatabase::database("central");
+modelTerminals = new QSqlQueryModel();
+modelTerminals->setQuery("SELECT t.TERMINAL_ID, TRIM(t.NAME) FROM TERMINALS t "
+                         "WHERE t.TERMINALTYPE=3 and t.ISACTIVE='T' "
+                         "ORDER BY t.TERMINAL_ID",dbcenter);
+QTableView *tv = new QTableView(this);
+tv->setModel(modelTerminals);
+tv->horizontalHeader()->hide();
+tv->verticalHeader()->hide();
+
+//    tv->resizeColumnsToContents();
+tv->setColumnWidth(0,60);
+tv->setColumnWidth(1,500);
+tv->verticalHeader()->setDefaultSectionSize(tv->verticalHeader()->minimumSectionSize());
+tv->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+tv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+tv->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+ui->comboBox->setModel(modelTerminals);
+ui->comboBox->setView(tv);
+
+
+
+
+
+
+Модель терминалов с подключениями
+modelTerminals->setQuery("SELECT t.terminal_id, TRIM(t.name)  AS name, c.server_name, c.db_name, c.con_login, c.con_password FROM TERMINALS t "
+                         "LEFT JOIN connections c ON c.terminal_id=t.terminal_id "
+                         "WHERE t.TERMINALTYPE=3 and t.ISACTIVE='T' AND c.connect_id=1 "
+                         "ORDER BY t.TERMINAL_ID",dbcenter);

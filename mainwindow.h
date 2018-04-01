@@ -21,6 +21,11 @@ public:
 public slots:
     void updateConnectionName(QString connName);
 
+private slots:
+
+
+    void on_actionClearSaleorders_triggered();
+
 private:
     void showLoginDialog();             //Отображение Диалога пользователя
     void createStatusBar();             //Создание строки состояния
@@ -28,14 +33,14 @@ private:
     void connCentralDB(int connID);     //Подключение к центральной базе
     void addNewConnection();            //Создание нового подключения
     void selectCentralDB();             //Выбор подключения к цетральной базе
-    void modelsCreate();                //Создание модель из ЦБ
+
 
 private:
     Ui::MainWindow *ui;
     QSqlRecord currentUser;             //Текущий пользователь
     QSqlRecord centralDBInfo;           //Данные для подключения к центральной базе
     QSqlTableModel *modelConnect;       //Модель подключений
-    QSqlQueryModel *modelTerminals;     //Модель терминалов
+
 };
 
 #endif // MAINWINDOW_H
