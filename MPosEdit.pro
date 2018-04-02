@@ -29,7 +29,9 @@ SOURCES += \
     loggingcategories.cpp \
     logindialog.cpp \
     connectioneditdialog.cpp \
-    clearsaleordersdialog.cpp
+    clearsaleordersdialog.cpp \
+    selectterminaldialog.cpp \
+    selectshiftdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -37,13 +39,17 @@ HEADERS += \
     logindialog.h \
     databaseoption.h \
     connectioneditdialog.h \
-    clearsaleordersdialog.h
+    clearsaleordersdialog.h \
+    selectterminaldialog.h \
+    selectshiftdialog.h
 
 FORMS += \
         mainwindow.ui \
     logindialog.ui \
     connectioneditdialog.ui \
-    clearsaleordersdialog.ui
+    clearsaleordersdialog.ui \
+    selectterminaldialog.ui \
+    selectshiftdialog.ui
 
 RESOURCES += \
     resourse.qrc
