@@ -23,6 +23,7 @@ void LoginDialog::createUI()
     modelUsers = new QSqlTableModel(this,dblite);
     modelUsers->setTable("users");
     modelUsers->select();
+    modelUsers->setFilter("user_active=1");
 
     ui->comboBoxUser->setModel(modelUsers);
     ui->comboBoxUser->setModelColumn(1);

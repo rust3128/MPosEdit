@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QCloseEvent>
 #include <QSqlRecord>
 #include <QLabel>
 #include <QSqlTableModel>
@@ -22,9 +23,9 @@ public slots:
     void updateConnectionName(QString connName);
 
 private slots:
-
-
     void on_actionClearSaleorders_triggered();
+    void on_actionUsers_triggered();
+    void on_actionExit_triggered();
 
 private:
     void showLoginDialog();             //Отображение Диалога пользователя
@@ -33,6 +34,8 @@ private:
     void connCentralDB(int connID);     //Подключение к центральной базе
     void addNewConnection();            //Создание нового подключения
     void selectCentralDB();             //Выбор подключения к цетральной базе
+    void setupUserInterface();          //настройка интерефейса пользователя
+    void closeEvent(QCloseEvent *event);//Закрытие программы
 
 
 private:

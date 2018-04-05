@@ -97,7 +97,7 @@
      <x>0</x>
      <y>0</y>
      <width>970</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -112,8 +112,15 @@
     </property>
     <addaction name="actionClearSaleorders"/>
    </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Настройка</string>
+    </property>
+    <addaction name="actionUsers"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuWork"/>
+   <addaction name="menuSettings"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="iconSize">
@@ -135,6 +142,10 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
+   <property name="icon">
+    <iconset resource="resourse.qrc">
+     <normaloff>:/Image/exit.png</normaloff>:/Image/exit.png</iconset>
+   </property>
    <property name="text">
     <string>Выход</string>
    </property>
@@ -152,6 +163,15 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
+   </property>
+  </action>
+  <action name="actionUsers">
+   <property name="icon">
+    <iconset resource="resourse.qrc">
+     <normaloff>:/Image/users.png</normaloff>:/Image/users.png</iconset>
+   </property>
+   <property name="text">
+    <string>Пользователи</string>
    </property>
   </action>
  </widget>

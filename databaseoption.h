@@ -22,9 +22,10 @@ bool createOptionsTables()
                "(user_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                "user_name VARCHAR(50) NOT NULL, "
                "user_fio VARCHAR(50) NOT NULL, "
-               "user_pass VARCHAR(50) NOT NULL)";
-    listSQL << "INSERT INTO `users`(`user_name`,`user_fio`,`user_pass`) "
-               "VALUES ('Администратор','Администратор А.А.','defrag')";
+               "user_pass VARCHAR(50) NOT NULL,"
+               "user_active INTEGER )";
+    listSQL << "INSERT INTO `users`(`user_name`,`user_fio`,`user_pass`,`user_active`) "
+               "VALUES ('Администратор','Администратор А.А.','defrag',1)";
     ///Создание таблицы подключений
     listSQL << "CREATE TABLE `connections` ( "
                "`conn_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "

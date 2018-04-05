@@ -4,5 +4,10 @@
         <file>Image/logo.ico</file>
         <file>Image/adddatabase.png</file>
         <file>Image/if_edit-clear_118917.png</file>
+        <file>Image/user_removed.png</file>
+        <file>Image/user_edit.png</file>
+        <file>Image/user_delete.png</file>
+        <file>Image/user_add.png</file>
+        <file>Image/exit.png</file>
     </qresource>
 </RCC>

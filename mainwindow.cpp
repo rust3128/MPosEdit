@@ -4,6 +4,7 @@
 #include "loggingcategories.h"
 #include "connectioneditdialog.h"
 #include "clearsaleordersdialog.h"
+#include "usersdialog.h"
 #include <QMessageBox>
 #include <QDebug>
 #include <QSqlError>
@@ -44,6 +45,7 @@ void MainWindow::showLoginDialog()
     loginDlg->exec();
     if(loginDlg->result()==QDialog::Accepted){
         currentUser = loginDlg->getUserData();
+        setupUserInterface();
         sendUser2StatusBar();
         selectCentralDB();
     } else {
@@ -71,6 +73,11 @@ void MainWindow::sendUser2StatusBar()
 }
 
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    qInfo(logInfo()) << "Завершение работы программы.";
+}
+
 
 void MainWindow::selectCentralDB()
 {
@@ -92,6 +99,13 @@ void MainWindow::selectCentralDB()
         break;
     default:
         break;
+    }
+}
+
+void MainWindow::setupUserInterface()
+{
+    if(currentUser.value("user_id").toInt()!=1){
+        ui->actionUsers->setEnabled(false);
     }
 }
 
@@ -136,4 +150,16 @@ void MainWindow::on_actionClearSaleorders_triggered()
     this->setCentralWidget(clearSaleordersDlg);
     this->setWindowTitle(this->windowTitle()+" Удаление продаж");
     clearSaleordersDlg->exec();
+}
+
+void MainWindow::on_actionUsers_triggered()
+{
+    UsersDialog *userDlg = new UsersDialog();
+    userDlg->exec();
+
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    this->close();
 }
