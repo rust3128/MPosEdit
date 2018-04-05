@@ -180,9 +180,10 @@ void ClearSaleordersDialog::on_pushButtonExit_clicked()
 void ClearSaleordersDialog::on_pushButtonClear_clicked()
 {
     QModelIndex idx = ui->tableView->currentIndex();
+    QSqlDatabase dbc = QSqlDatabase::database("central");
 
     QString strUpdate,strSql;
-    QSqlQuery q;
+    QSqlQuery q =QSqlQuery(dbc);
     qInfo(logInfo()) << "Обнуляем транзакцию. АЗС" << modelSale->data(modelSale->index(idx.row(),0)).toString().trimmed()
                      << "Смена" << ui->lineEditShiftID->text()
                      << "Чек №" << ui->lineEditNumCheck->text();
@@ -235,5 +236,5 @@ void ClearSaleordersDialog::on_pushButtonClear_clicked()
     QMessageBox::information(0, qApp->tr("Операция завершена"),
                           QString("Очистка транзакции успешно произведена\n"));
     qInfo(logInfo()) << "Транзакция обнулена.";
-    modelSale->setQuery(modelSale->query().lastQuery());
+    modelSale->setQuery(modelSale->query().lastQuery(),dbc);
 }
