@@ -13,7 +13,7 @@ class ClearSaleordersDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClearSaleordersDialog(QWidget *parent = 0);
+    explicit ClearSaleordersDialog(int user_id, QWidget *parent = 0);
     ~ClearSaleordersDialog();
 
 private slots:
@@ -43,6 +43,7 @@ private:
     QSqlQueryModel *modelSale;          //Модель чеков
     int currentTerminal;                //Выбранный терминал
     int currentShift;                   //Выбранная смена
+    int currentUser;                    //Текущий пользователь
 
 };
 

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "loggingcategories.h"
+#include "insertlog.h"
 #include "databaseoption.h"
 #include <QApplication>
 #include <QFile>
@@ -28,7 +29,7 @@ int main(int argc, char *argv[])
     m_logFile.data()->open(QFile::Append | QFile::Text);
     // Устанавливаем обработчик
     qInstallMessageHandler(messageHandler);
-    qInfo(logInfo()) << "Запуск программы.";
+
 
 #ifndef QT_NO_TRANSLATION
     QString translatorFileName = QLatin1String("qt_");
@@ -44,6 +45,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    qInfo(logInfo()) << "Запуск программы.";
     MainWindow w;
     w.show();
 

@@ -102,7 +102,7 @@
      <x>0</x>
      <y>0</y>
      <width>970</width>
-     <height>27</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -116,6 +116,8 @@
      <string>Операции</string>
     </property>
     <addaction name="actionClearSaleorders"/>
+    <addaction name="separator"/>
+    <addaction name="actionProtokol"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -164,7 +166,7 @@
     <string>Удаление продажи</string>
    </property>
    <property name="statusTip">
-    <string>Обнуление тразации в ЦБ</string>
+    <string>Обнуление транзакции в ЦБ</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
@@ -177,6 +179,14 @@
    </property>
    <property name="text">
     <string>Пользователи</string>
+   </property>
+  </action>
+  <action name="actionProtokol">
+   <property name="text">
+    <string>Протокол операций</string>
+   </property>
+   <property name="statusTip">
+    <string>История измения баз данных</string>
    </property>
   </action>
  </widget>

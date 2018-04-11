@@ -43,7 +43,8 @@ HEADERS += \
     clearsaleordersdialog.h \
     selectterminaldialog.h \
     selectshiftdialog.h \
-    usersdialog.h
+    usersdialog.h \
+    insertlog.h
 
 FORMS += \
         mainwindow.ui \

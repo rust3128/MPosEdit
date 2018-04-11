@@ -35,6 +35,24 @@ bool createOptionsTables()
                "`conn_user`	INTEGER NOT NULL, "
                "`conn_pass`	INTEGER NOT NULL,"
                "`conn_curr` INTEGER NOT NULL)";
+    ///Создание таблицы типов операций
+    listSQL << "CREATE TABLE `logtypes` ( "
+               "`LOGTYPE_ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
+               "`LOTTYPE_TEXT`	TEXT NOT NULL"
+               ")";
+    listSQL << "INSERT INTO `logtypes`(`LOTTYPE_TEXT`) VALUES ('Удаление продажи')";
+    listSQL << "INSERT INTO `logtypes`(`LOTTYPE_TEXT`) VALUES ('Восстановление продажи')";
+    /// Создание таблицы логирования
+    listSQL << "CREATE TABLE `logs` ( "
+               "`log_id`        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
+               "`logtype_id`	INTEGER NOT NULL, "
+               "`operator_id`	INTEGER NOT NULL, "
+               "`dat`           TEXT NOT NULL, "
+               "`terminal_id`	INTEGER NOT NULL, "
+               "`shift_id`      INTEGER NOT NULL, "
+               "`check_num` 	INTEGER NOT NULL, "
+               "`sql`           BLOB)";
+
 
     QSqlDatabase dblite = QSqlDatabase::database("options");
     QSqlQuery q = QSqlQuery(dblite);

@@ -146,7 +146,7 @@ void MainWindow::connCentralDB(int connID)
 
 void MainWindow::on_actionClearSaleorders_triggered()
 {
-    ClearSaleordersDialog *clearSaleordersDlg = new ClearSaleordersDialog();
+    ClearSaleordersDialog *clearSaleordersDlg = new ClearSaleordersDialog(currentUser.value("user_id").toInt());
     this->setCentralWidget(clearSaleordersDlg);
     this->setWindowTitle(this->windowTitle()+" Удаление продаж");
     clearSaleordersDlg->exec();

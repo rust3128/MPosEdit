@@ -3,6 +3,7 @@
 #include "selectterminaldialog.h"
 #include "selectshiftdialog.h"
 #include "loggingcategories.h"
+#include "insertlog.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -10,7 +11,7 @@
 #include <QMessageBox>
 #include <QDebug>
 
-ClearSaleordersDialog::ClearSaleordersDialog(QWidget *parent) :
+ClearSaleordersDialog::ClearSaleordersDialog(int user_id, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ClearSaleordersDialog)
 {
@@ -21,6 +22,7 @@ ClearSaleordersDialog::ClearSaleordersDialog(QWidget *parent) :
     ui->groupBoxShifts->hide();
     ui->groupBoxCheck->hide();
     createModelTerminals();
+    currentUser = user_id;
 }
 
 ClearSaleordersDialog::~ClearSaleordersDialog()
@@ -236,5 +238,6 @@ void ClearSaleordersDialog::on_pushButtonClear_clicked()
     QMessageBox::information(0, qApp->tr("Операция завершена"),
                           QString("Очистка транзакции успешно произведена\n"));
     qInfo(logInfo()) << "Транзакция обнулена.";
+    insertLog(1,currentUser,currentTerminal,currentShift,ui->lineEditNumCheck->text().toInt(),strSql);
     modelSale->setQuery(modelSale->query().lastQuery(),dbc);
 }
