@@ -9,5 +9,7 @@
         <file>Image/user_delete.png</file>
         <file>Image/user_add.png</file>
         <file>Image/exit.png</file>
+        <file>Image/if_filesave_18652.png</file>
+        <file>Image/if_editpaste_699.png</file>
     </qresource>
 </RCC>

@@ -38,10 +38,10 @@ bool createOptionsTables()
     ///Создание таблицы типов операций
     listSQL << "CREATE TABLE `logtypes` ( "
                "`LOGTYPE_ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
-               "`LOTTYPE_TEXT`	TEXT NOT NULL"
+               "`LOGTYPE_TEXT`	TEXT NOT NULL"
                ")";
-    listSQL << "INSERT INTO `logtypes`(`LOTTYPE_TEXT`) VALUES ('Удаление продажи')";
-    listSQL << "INSERT INTO `logtypes`(`LOTTYPE_TEXT`) VALUES ('Восстановление продажи')";
+    listSQL << "INSERT INTO `logtypes`(`LOGTYPE_TEXT`) VALUES ('Удаление продажи')";
+    listSQL << "INSERT INTO `logtypes`(`LOGTYPE_TEXT`) VALUES ('Восстановление продажи')";
     /// Создание таблицы логирования
     listSQL << "CREATE TABLE `logs` ( "
                "`log_id`        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "

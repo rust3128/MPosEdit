@@ -190,15 +190,15 @@ void ClearSaleordersDialog::on_pushButtonClear_clicked()
                      << "Смена" << ui->lineEditShiftID->text()
                      << "Чек №" << ui->lineEditNumCheck->text();
     strUpdate = "UPDATE SALEORDERS SET ";
-    strUpdate += QString("GIVE = '%1' ").arg(modelSale->data(modelSale->index(idx.row(),5)).toString().trimmed());
-    strUpdate += QString("ORDERED = '%1' ").arg(modelSale->data(modelSale->index(idx.row(),6)).toDouble());
-    strUpdate += QString("SUMMA = '%1' ").arg(modelSale->data(modelSale->index(idx.row(),7)).toString().trimmed());
-    strUpdate += QString("DISCOUNTSUMMA = '%1' ").arg(modelSale->data(modelSale->index(idx.row(),8)).toString().trimmed());
-    strUpdate += QString("GIVE1 = '%1' ").arg(modelSale->data(modelSale->index(idx.row(),8)).toDouble());
-    strUpdate += QString("WHERE TERMINAL_ID = '%1' "
-                          "AND SALEORDER_ID = '%2'")
-                  .arg(modelSale->data(modelSale->index(idx.row(),0)).toString().trimmed())
-                  .arg(modelSale->data(modelSale->index(idx.row(),2)).toString().trimmed());
+    strUpdate += QString("GIVE = %1 ").arg(modelSale->data(modelSale->index(idx.row(),5)).toDouble());
+    strUpdate += QString("ORDERED = %1 ").arg(modelSale->data(modelSale->index(idx.row(),6)).toDouble());
+    strUpdate += QString("SUMMA = %1 ").arg(modelSale->data(modelSale->index(idx.row(),7)).toDouble());
+    strUpdate += QString("DISCOUNTSUMMA = %1 ").arg(modelSale->data(modelSale->index(idx.row(),8)).toDouble());
+    strUpdate += QString("GIVE1 = %1 ").arg(modelSale->data(modelSale->index(idx.row(),8)).toDouble());
+    strUpdate += QString("WHERE TERMINAL_ID = %1 "
+                          "AND SALEORDER_ID = %2")
+                  .arg(modelSale->data(modelSale->index(idx.row(),0)).toInt())
+                  .arg(modelSale->data(modelSale->index(idx.row(),2)).toInt());
     qInfo(logInfo()) << "--------------------------------------------------------";
     qInfo(logInfo()) << "Обнуляем Чек №" << ui->lineEditNumCheck->text() << "AЗС"
                      << ui->lineEditTerminalID->text() << ui->labelShiftData->text();
@@ -238,6 +238,6 @@ void ClearSaleordersDialog::on_pushButtonClear_clicked()
     QMessageBox::information(0, qApp->tr("Операция завершена"),
                           QString("Очистка транзакции успешно произведена\n"));
     qInfo(logInfo()) << "Транзакция обнулена.";
-    insertLog(1,currentUser,currentTerminal,currentShift,ui->lineEditNumCheck->text().toInt(),strSql);
+    insertLog(1,currentUser,currentTerminal,currentShift,ui->lineEditNumCheck->text().toInt(),strUpdate);
     modelSale->setQuery(modelSale->query().lastQuery(),dbc);
 }

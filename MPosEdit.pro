@@ -32,7 +32,8 @@ SOURCES += \
     clearsaleordersdialog.cpp \
     selectterminaldialog.cpp \
     selectshiftdialog.cpp \
-    usersdialog.cpp
+    usersdialog.cpp \
+    logsdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,7 +45,8 @@ HEADERS += \
     selectterminaldialog.h \
     selectshiftdialog.h \
     usersdialog.h \
-    insertlog.h
+    insertlog.h \
+    logsdialog.h
 
 FORMS += \
         mainwindow.ui \
@@ -53,7 +55,8 @@ FORMS += \
     clearsaleordersdialog.ui \
     selectterminaldialog.ui \
     selectshiftdialog.ui \
-    usersdialog.ui
+    usersdialog.ui \
+    logsdialog.ui
 
 RESOURCES += \
     resourse.qrc

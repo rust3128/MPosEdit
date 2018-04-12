@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "logindialog.h"
+#include "logsdialog.h"
 #include "loggingcategories.h"
 #include "connectioneditdialog.h"
 #include "clearsaleordersdialog.h"
@@ -162,4 +163,12 @@ void MainWindow::on_actionUsers_triggered()
 void MainWindow::on_actionExit_triggered()
 {
     this->close();
+}
+
+void MainWindow::on_actionProtokol_triggered()
+{
+    LogsDialog *logsDlg = new LogsDialog();
+    this->setCentralWidget(logsDlg);
+    this->setWindowTitle(this->windowTitle()+" Протокол операций");
+    logsDlg->exec();
 }
