@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1">
    <item row="0" column="0" rowspan="2">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="groupBoxFiltres">
      <property name="title">
       <string>Фильтр </string>
      </property>
@@ -27,7 +27,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QGroupBox" name="">
+       <widget class="QGroupBox" name="groupBox">
         <property name="title">
          <string>Информация о чеке</string>
         </property>
@@ -220,6 +220,9 @@
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
        <widget class="QToolButton" name="toolButtonCopy">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Скопировать скрипт в буфер обмена&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>...</string>
         </property>
@@ -231,6 +234,9 @@
       </item>
       <item row="0" column="5">
        <widget class="QToolButton" name="toolButtonClose">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Закрыть скрипт&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>...</string>
         </property>

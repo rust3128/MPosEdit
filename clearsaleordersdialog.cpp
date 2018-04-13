@@ -190,10 +190,10 @@ void ClearSaleordersDialog::on_pushButtonClear_clicked()
                      << "Смена" << ui->lineEditShiftID->text()
                      << "Чек №" << ui->lineEditNumCheck->text();
     strUpdate = "UPDATE SALEORDERS SET ";
-    strUpdate += QString("GIVE = %1 ").arg(modelSale->data(modelSale->index(idx.row(),5)).toDouble());
-    strUpdate += QString("ORDERED = %1 ").arg(modelSale->data(modelSale->index(idx.row(),6)).toDouble());
-    strUpdate += QString("SUMMA = %1 ").arg(modelSale->data(modelSale->index(idx.row(),7)).toDouble());
-    strUpdate += QString("DISCOUNTSUMMA = %1 ").arg(modelSale->data(modelSale->index(idx.row(),8)).toDouble());
+    strUpdate += QString("GIVE = %1, ").arg(modelSale->data(modelSale->index(idx.row(),5)).toDouble());
+    strUpdate += QString("ORDERED = %1, ").arg(modelSale->data(modelSale->index(idx.row(),6)).toDouble());
+    strUpdate += QString("SUMMA = %1, ").arg(modelSale->data(modelSale->index(idx.row(),7)).toDouble());
+    strUpdate += QString("DISCOUNTSUMMA = %1, ").arg(modelSale->data(modelSale->index(idx.row(),8)).toDouble());
     strUpdate += QString("GIVE1 = %1 ").arg(modelSale->data(modelSale->index(idx.row(),8)).toDouble());
     strUpdate += QString("WHERE TERMINAL_ID = %1 "
                           "AND SALEORDER_ID = %2")

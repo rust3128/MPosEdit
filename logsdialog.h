@@ -19,17 +19,15 @@ private slots:
     void on_pushButtonClose_clicked();
     void on_tableView_doubleClicked(const QModelIndex &idx);
     void on_toolButtonSaveAs_clicked();
-
     void on_toolButtonClose_clicked();
-
     void on_toolButtonCopy_clicked();
-
 private:
     void createUI();
 private:
     Ui::LogsDialog *ui;
     QSqlRelationalTableModel *modelLogs;
     QString strSQL;
+    QModelIndex curIdx;         //Index
 };
 
 #endif // LOGSDIALOG_H

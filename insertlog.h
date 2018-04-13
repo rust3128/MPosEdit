@@ -18,7 +18,6 @@ static void insertLog(int logtype, int operator_id, int terminal_id, int shift_i
             .arg(shift_id)
             .arg(check_num)
             .arg(sql);
-    qInfo(logInfo()) << "SQL log" << strSQL;
     if(!q.exec(strSQL)) qCritical(logCritical()) << "Не удалось добавить запись в log файл." << endl
                                                  << q.lastError().text();
 }

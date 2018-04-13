@@ -6,6 +6,8 @@
 #include <QSqlRelationalDelegate>
 #include <QClipboard>
 #include <QMessageBox>
+#include <QDir>
+#include <QFileDialog>
 
 LogsDialog::LogsDialog(QWidget *parent) :
     QDialog(parent),
@@ -13,6 +15,7 @@ LogsDialog::LogsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     createUI();
+    ui->groupBoxFiltres->hide();
 }
 
 LogsDialog::~LogsDialog()
@@ -62,12 +65,45 @@ void LogsDialog::on_tableView_doubleClicked(const QModelIndex &idx)
     strSQL = modelLogs->data(modelLogs->index(idx.row(),7)).toString();
     ui->textBrowser->setPlainText(strSQL);
     ui->textBrowser->selectAll();
+    curIdx = idx;
 
 }
 
 void LogsDialog::on_toolButtonSaveAs_clicked()
 {
+    QString curPath = QDir::currentPath()+"//SQL";
+    QString sqlFileName = modelLogs->data(modelLogs->index(curIdx.row(),4)).toString();
+    sqlFileName += "_"+modelLogs->data(modelLogs->index(curIdx.row(),5)).toString();
+    sqlFileName += "_"+modelLogs->data(modelLogs->index(curIdx.row(),6)).toString()+".sql";
 
+    QDir dir(curPath);
+    if(!dir.exists()) {
+        dir.mkdir(curPath);
+    }
+    dir.cd(curPath);
+//    qInfo(logInfo()) << "QDir" << dir.current() << "QString" << dir.canonicalPath();
+    QString fileName = QFileDialog::getSaveFileName(this,"Сохранить скрипт",curPath+"//"+sqlFileName,
+                                           "SQL file (*.sql);;Все файлы (*.*)");
+
+    QFile file(fileName);
+    if(file.open(QIODevice::WriteOnly))
+    {
+        QTextStream stream(&file);
+        stream << "/* Скрипт восстановления чека "+modelLogs->data(modelLogs->index(curIdx.row(),6)).toString() +
+                  " АЗС " + modelLogs->data(modelLogs->index(curIdx.row(),4)).toString() +
+                  " Смена " + modelLogs->data(modelLogs->index(curIdx.row(),5)).toString() + " */" << endl;
+        stream << modelLogs->data(modelLogs->index(curIdx.row(),7)).toString()+";" << endl;
+        stream << "commit work;" << endl;
+        if (stream.status() != QTextStream::Ok){
+            qCritical(logCritical()) << "Ошибка записи в файл";
+            QMessageBox::information(this,"Сохранение файла",
+                                         "Не удалось сохранить файл.");
+        } else {
+            QMessageBox::information(this,"Сохранение файла",
+                                         "Файл восстановления успешно сохранен.");
+        }
+    }
+    on_toolButtonClose_clicked();
 }
 
 void LogsDialog::on_toolButtonClose_clicked()
@@ -82,4 +118,5 @@ void LogsDialog::on_toolButtonCopy_clicked()
     clipboard->setText(strSQL);
     QMessageBox::information(this,"Копирование",
                              "Скрипт успешно скопирован в буфер обмена.");
+    on_toolButtonClose_clicked();
 }
