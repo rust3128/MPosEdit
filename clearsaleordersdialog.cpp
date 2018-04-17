@@ -123,11 +123,12 @@ void ClearSaleordersDialog::on_pushButtonFindCheck_clicked()
     QString strSql;
 
 
-    strSql=QString("SELECT a.TERMINAL_ID, t.name, a.SALEORDER_ID, a.NUM_CHECK,f.SHORTNAME, "
+    strSql=QString("SELECT a.TERMINAL_ID, t.name, a.SALEORDER_ID, a.NUM_CHECK, a.dat, a.sec, p.name, f.SHORTNAME, "
                    "a.GIVE, a.ORDERED, a.SUMMA, a.DISCOUNTSUMMA,a.GIVE1 "
                    "FROM SALEORDERS a "
                    "LEFT JOIN fuels f ON a.FUEL_ID=f.FUEL_ID "
                    "LEFT JOIN TERMINALS t ON a.TERMINAL_ID=t.TERMINAL_ID "
+                   "LEFT JOIN PAYTYPES p ON p.PAYTYPE_ID=a.PAYTYPE_ID "
                    "where a.TERMINAL_ID=%1 and a.SHIFT_ID=%2 and a.NUM_CHECK=%3")
             .arg(ui->lineEditTerminalID->text().toInt())
             .arg(ui->lineEditShiftID->text().toInt())
@@ -144,19 +145,22 @@ void ClearSaleordersDialog::on_pushButtonFindCheck_clicked()
     ui->labelTermInfo->setText("Терминал "+ui->lineEditTerminalID->text()+" "+ui->labelTerminalName->text());
     ui->labelShiftInfo->setText(ui->labelShiftData->text());
 
-    modelSale->setHeaderData(3,Qt::Horizontal,"Чек");
-    modelSale->setHeaderData(4,Qt::Horizontal,"Топливо");
-    modelSale->setHeaderData(5,Qt::Horizontal,"Получено");
-    modelSale->setHeaderData(6,Qt::Horizontal,"Заказано");
-    modelSale->setHeaderData(7,Qt::Horizontal,"Сумма");
-    modelSale->setHeaderData(8,Qt::Horizontal,"Скидка");
+    modelSale->setHeaderData(3,Qt::Horizontal,"№ чека");
+    modelSale->setHeaderData(4,Qt::Horizontal,"Дата чека");
+    modelSale->setHeaderData(5,Qt::Horizontal,"Время выолнения\nзаказа, сек.");
+    modelSale->setHeaderData(6,Qt::Horizontal,"Вид оплаты");
+    modelSale->setHeaderData(7,Qt::Horizontal,"Топливо");
+    modelSale->setHeaderData(8,Qt::Horizontal,"Получено");
+    modelSale->setHeaderData(9,Qt::Horizontal,"Заказано");
+    modelSale->setHeaderData(10,Qt::Horizontal,"Сумма");
+    modelSale->setHeaderData(11,Qt::Horizontal,"Скидка");
 
 
     ui->tableView->setModel(modelSale);
     ui->tableView->hideColumn(0);
     ui->tableView->hideColumn(1);
     ui->tableView->hideColumn(2);
-    ui->tableView->hideColumn(9);
+    ui->tableView->hideColumn(12);
     ui->tableView->verticalHeader()->hide();
     ui->tableView->resizeColumnsToContents();
 
