@@ -5,6 +5,7 @@
 #include "loggingcategories.h"
 #include "connectioneditdialog.h"
 #include "clearsaleordersdialog.h"
+#include "connectionlistdialog.h"
 #include "usersdialog.h"
 #include <QMessageBox>
 #include <QDebug>
@@ -96,9 +97,9 @@ void MainWindow::selectCentralDB()
     case 1:
         //Единственное подключение
         connCentralDB(0);
-
         break;
     default:
+
         break;
     }
 }
@@ -171,4 +172,10 @@ void MainWindow::on_actionProtokol_triggered()
     this->setCentralWidget(logsDlg);
     this->setWindowTitle(this->windowTitle()+" Протокол операций");
     logsDlg->exec();
+}
+
+void MainWindow::on_actionConnectionList_triggered()
+{
+    ConnectionListDialog *connListDlg = new ConnectionListDialog();
+    connListDlg->exec();
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>970</width>
-    <height>595</height>
+    <width>1103</width>
+    <height>686</height>
    </rect>
   </property>
   <property name="font">
@@ -101,7 +101,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>970</width>
+     <width>1103</width>
      <height>23</height>
     </rect>
    </property>
@@ -124,6 +124,7 @@
      <string>Настройка</string>
     </property>
     <addaction name="actionUsers"/>
+    <addaction name="actionConnectionList"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuWork"/>
@@ -187,6 +188,15 @@
    </property>
    <property name="statusTip">
     <string>История измения баз данных</string>
+   </property>
+  </action>
+  <action name="actionConnectionList">
+   <property name="icon">
+    <iconset resource="resourse.qrc">
+     <normaloff>:/Image/connect.png</normaloff>:/Image/connect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Подключения</string>
    </property>
   </action>
  </widget>

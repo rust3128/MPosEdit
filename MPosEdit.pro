@@ -33,7 +33,9 @@ SOURCES += \
     selectterminaldialog.cpp \
     selectshiftdialog.cpp \
     usersdialog.cpp \
-    logsdialog.cpp
+    logsdialog.cpp \
+    connectionlistdialog.cpp \
+    tanlemodelconnect.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -46,7 +48,9 @@ HEADERS += \
     selectshiftdialog.h \
     usersdialog.h \
     insertlog.h \
-    logsdialog.h
+    logsdialog.h \
+    connectionlistdialog.h \
+    tanlemodelconnect.h
 
 FORMS += \
         mainwindow.ui \
@@ -56,10 +60,12 @@ FORMS += \
     selectterminaldialog.ui \
     selectshiftdialog.ui \
     usersdialog.ui \
-    logsdialog.ui
+    logsdialog.ui \
+    connectionlistdialog.ui
 
 RESOURCES += \
     resourse.qrc
 
 DISTFILES += \
-    notepad
+    notepad \
+    Image/connect.png

@@ -11,5 +11,6 @@
         <file>Image/exit.png</file>
         <file>Image/if_filesave_18652.png</file>
         <file>Image/if_editpaste_699.png</file>
+        <file>Image/connect.png</file>
     </qresource>
 </RCC>

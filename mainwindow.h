@@ -29,6 +29,8 @@ private slots:
 
     void on_actionProtokol_triggered();
 
+    void on_actionConnectionList_triggered();
+
 private:
     void showLoginDialog();             //Отображение Диалога пользователя
     void createStatusBar();             //Создание строки состояния

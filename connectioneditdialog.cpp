@@ -25,6 +25,7 @@ void ConnectionEditDialog::addNewConnection()
 {
     this->setWindowTitle("Новое соединение");
     ui->checkBoxIsCurrent->setChecked(true);
+
 }
 
 
@@ -35,6 +36,8 @@ void ConnectionEditDialog::on_pushButtonCansel_clicked()
 
 void ConnectionEditDialog::on_pushButtonSave_clicked()
 {
+    int isactive;
+    QString strSQL;
     if(!validateData()){
         return;
     }
@@ -44,21 +47,30 @@ void ConnectionEditDialog::on_pushButtonSave_clicked()
     QSqlDatabase dblite = QSqlDatabase::database("options");
     QSqlQuery q = QSqlQuery(dblite);
 
-    QString strSQL = QString("INSERT INTO `connections` (`conn_name`,`conn_host`,`conn_db`,`conn_user`,`conn_pass`,`conn_curr`) "
+    if(ui->checkBoxIsCurrent->isChecked()) {
+        isactive=1;
+        emit sendConnectionName(ui->lineEditName->text().trimmed()+" "+ui->lineEditServer->text().trimmed()+":"+ui->lineEditDataBase->text().trimmed());
+        strSQL = "UPDATE connections SET conn_curr = 0";
+        q.exec(strSQL);
+    }
+    else
+        isactive=0;
+
+    strSQL = QString("INSERT INTO `connections` (`conn_name`,`conn_host`,`conn_db`,`conn_user`,`conn_pass`,`conn_curr`) "
                              "VALUES ('%1','%2','%3','%4','%5','%6')")
             .arg(ui->lineEditName->text().trimmed())
             .arg(ui->lineEditServer->text().trimmed())
             .arg(ui->lineEditDataBase->text().trimmed())
             .arg(ui->lineEditUser->text().trimmed())
             .arg(ui->lineEditPassword->text().trimmed())
-            .arg('1');
+            .arg(isactive);
     if(!q.exec(strSQL)) {
         qCritical(logCritical()) << "Не возможно добавить подключение." << q.lastError().text();
         QMessageBox::critical(this,"Ошибка", QString("Не возможно открыть базу данных!\n%1\nПроверьте настройку подключения.")
                               .arg(q.lastError().text()));
         return;
     }
-    emit sendConnectionName(ui->lineEditName->text().trimmed()+" "+ui->lineEditServer->text().trimmed()+":"+ui->lineEditDataBase->text().trimmed());
+
     this->accept();
 
 }
