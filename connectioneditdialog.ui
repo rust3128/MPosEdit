@@ -102,7 +102,7 @@
    <item row="1" column="2">
     <widget class="QCheckBox" name="checkBoxIsCurrent">
      <property name="text">
-      <string>Сделать текущим подключением</string>
+      <string>Текущее подключение</string>
      </property>
     </widget>
    </item>

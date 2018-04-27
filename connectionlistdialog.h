@@ -19,6 +19,10 @@ public:
 private slots:
     void on_pbNew_clicked();
 
+    void on_pbExit_clicked();
+
+    void on_pbEdit_clicked();
+
 private:
     void createUI();
 private:

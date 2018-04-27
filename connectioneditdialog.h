@@ -25,9 +25,14 @@ private:
     void addNewConnection();        //Новое подключение
     bool validateData();            //Проверка заполнения формы
     bool connectCentralDB();        //Подключение к центрально базе данных
+    void editConnections(int ID);         //редактирование подключения
+    void newConnSave();             //Сохранение нового соединения
+    void updateConn();              //Редактирование соединения
 
 private:
     Ui::ConnectionEditDialog *ui;
+    bool connNew;
+    int connID;
 };
 
 #endif // CONNECTIONEDITDIALOG_H

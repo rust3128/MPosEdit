@@ -83,6 +83,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::selectCentralDB()
 {
+    int conCur;
     QSqlDatabase dblite = QSqlDatabase::database("options");
     modelConnect = new QSqlTableModel(this,dblite);
 
@@ -95,11 +96,17 @@ void MainWindow::selectCentralDB()
         addNewConnection();
         break;
     case 1:
-        //Единственное подключение
-        connCentralDB(0);
+        connCentralDB(1);
         break;
     default:
-
+        for(int i; i<modelConnect->rowCount();++i) {
+                    if(modelConnect->data(modelConnect->index(i,6,QModelIndex())).toInt()==1){
+                        conCur = i;
+                        break;
+                    }
+                }
+                qDebug() << "Currentd ID connections" << conCur;
+                connCentralDB(conCur);
         break;
     }
 }
@@ -121,7 +128,6 @@ void MainWindow::addNewConnection()
 
 void MainWindow::connCentralDB(int connID)
 {
-
 
     QSqlDatabase dbcentr = QSqlDatabase::addDatabase("QIBASE","central");
 
