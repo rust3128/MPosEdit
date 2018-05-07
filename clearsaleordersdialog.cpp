@@ -16,7 +16,7 @@ ClearSaleordersDialog::ClearSaleordersDialog(int user_id, QWidget *parent) :
     ui(new Ui::ClearSaleordersDialog)
 {
     ui->setupUi(this);
-    ui->labelTerminalName->setText("Термиал не указан...");
+    ui->labelTerminalName->setText("Терминал не указан...");
     ui->labelShiftData->setText("Смена не выбрана...");
     ui->frameCheckInfo->hide();
     ui->groupBoxShifts->hide();

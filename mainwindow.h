@@ -31,6 +31,8 @@ private slots:
 
     void on_actionConnectionList_triggered();
 
+    void on_actionActivateArticles_triggered();
+
 private:
     void showLoginDialog();             //Отображение Диалога пользователя
     void createStatusBar();             //Создание строки состояния

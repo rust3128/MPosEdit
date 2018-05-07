@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
+QT       += core gui sql network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -35,7 +35,8 @@ SOURCES += \
     usersdialog.cpp \
     logsdialog.cpp \
     connectionlistdialog.cpp \
-    tanlemodelconnect.cpp
+    tanlemodelconnect.cpp \
+    activatearticlesdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,7 +51,9 @@ HEADERS += \
     insertlog.h \
     logsdialog.h \
     connectionlistdialog.h \
-    tanlemodelconnect.h
+    tanlemodelconnect.h \
+    activatearticlesdialog.h \
+    passconv.h
 
 FORMS += \
         mainwindow.ui \
@@ -61,7 +64,8 @@ FORMS += \
     selectshiftdialog.ui \
     usersdialog.ui \
     logsdialog.ui \
-    connectionlistdialog.ui
+    connectionlistdialog.ui \
+    activatearticlesdialog.ui
 
 RESOURCES += \
     resourse.qrc

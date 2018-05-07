@@ -116,6 +116,7 @@
      <string>Операции</string>
     </property>
     <addaction name="actionClearSaleorders"/>
+    <addaction name="actionActivateArticles"/>
     <addaction name="separator"/>
     <addaction name="actionProtokol"/>
    </widget>
@@ -147,6 +148,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionClearSaleorders"/>
+   <addaction name="actionActivateArticles"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
@@ -197,6 +199,18 @@
    </property>
    <property name="text">
     <string>Подключения</string>
+   </property>
+  </action>
+  <action name="actionActivateArticles">
+   <property name="icon">
+    <iconset resource="resourse.qrc">
+     <normaloff>:/Image/activate_articles.png</normaloff>:/Image/activate_articles.png</iconset>
+   </property>
+   <property name="text">
+    <string>Активность товара</string>
+   </property>
+   <property name="statusTip">
+    <string>Установка активности товара с не нулевым остатком</string>
    </property>
   </action>
  </widget>

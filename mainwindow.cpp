@@ -7,6 +7,7 @@
 #include "clearsaleordersdialog.h"
 #include "connectionlistdialog.h"
 #include "usersdialog.h"
+#include "activatearticlesdialog.h"
 #include <QMessageBox>
 #include <QDebug>
 #include <QSqlError>
@@ -115,6 +116,7 @@ void MainWindow::setupUserInterface()
 {
     if(currentUser.value("user_id").toInt()!=1){
         ui->actionUsers->setEnabled(false);
+        ui->actionConnectionList->setEnabled(false);
     }
 }
 
@@ -176,7 +178,7 @@ void MainWindow::on_actionProtokol_triggered()
 {
     LogsDialog *logsDlg = new LogsDialog();
     this->setCentralWidget(logsDlg);
-    this->setWindowTitle(this->windowTitle()+" Протокол операций");
+    this->setWindowTitle(this->windowTitle()+". Протокол операций");
     logsDlg->exec();
 }
 
@@ -184,4 +186,12 @@ void MainWindow::on_actionConnectionList_triggered()
 {
     ConnectionListDialog *connListDlg = new ConnectionListDialog();
     connListDlg->exec();
+}
+
+void MainWindow::on_actionActivateArticles_triggered()
+{
+    ActivateArticlesDialog *activArtDlg = new ActivateArticlesDialog(currentUser.value("user_id").toInt());
+    this->setCentralWidget(activArtDlg);
+    this->setWindowTitle(this->windowTitle()+". Активация товаров с не нулевым остатком.");
+    activArtDlg->exec();
 }

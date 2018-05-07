@@ -12,5 +12,6 @@
         <file>Image/if_filesave_18652.png</file>
         <file>Image/if_editpaste_699.png</file>
         <file>Image/connect.png</file>
+        <file>Image/activate_articles.png</file>
     </qresource>
 </RCC>
