@@ -36,7 +36,8 @@ SOURCES += \
     logsdialog.cpp \
     connectionlistdialog.cpp \
     tanlemodelconnect.cpp \
-    activatearticlesdialog.cpp
+    activatearticlesdialog.cpp \
+    activatearticles.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -53,7 +54,8 @@ HEADERS += \
     connectionlistdialog.h \
     tanlemodelconnect.h \
     activatearticlesdialog.h \
-    passconv.h
+    passconv.h \
+    activatearticles.h
 
 FORMS += \
         mainwindow.ui \

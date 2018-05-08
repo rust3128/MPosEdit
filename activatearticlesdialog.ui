@@ -70,6 +70,13 @@ font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QLabel" name="labelConnAviable">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

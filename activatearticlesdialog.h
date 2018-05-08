@@ -5,6 +5,7 @@
 #include <QSqlQueryModel>
 #include <QTcpSocket>
 
+
 namespace Ui {
 class ActivateArticlesDialog;
 }
@@ -23,9 +24,14 @@ private slots:
     void on_toolButtonSelectTerminal_clicked();
     void getSelectedTerminal(int termID);
 
+    void on_commandLinkButton_clicked();
+    void startActivation();
+    void finishActibation();
+
 private:
     void createModelTerminals();        //Создание модели терминалов
     void getConnInfo(int terminal_id);  //Параметры подключения к АЗС
+    bool validateServer();              //Проверка доступности сервера
 private:
     Ui::ActivateArticlesDialog *ui;
     QSqlQueryModel *modelTerminals;     //Модель терминалов
