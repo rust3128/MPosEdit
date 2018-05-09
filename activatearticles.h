@@ -13,7 +13,8 @@ public:
 
 signals:
     void finActivated();                    //Завершение операции
-
+    void sendConnStatus(bool);              //Отправка статуса соедиенеия
+    void sendExecStatus();                  //Выполнение процедуры
 public slots:
     void activadedGo();                     //TODO реализация активации
 private:

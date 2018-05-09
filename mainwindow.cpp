@@ -97,10 +97,10 @@ void MainWindow::selectCentralDB()
         addNewConnection();
         break;
     case 1:
-        connCentralDB(1);
+        connCentralDB(0);
         break;
     default:
-        for(int i; i<modelConnect->rowCount();++i) {
+        for(int i=0; i<modelConnect->rowCount();++i) {
                     if(modelConnect->data(modelConnect->index(i,6,QModelIndex())).toInt()==1){
                         conCur = i;
                         break;

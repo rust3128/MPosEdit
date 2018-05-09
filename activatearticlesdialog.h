@@ -27,8 +27,13 @@ private slots:
     void on_commandLinkButton_clicked();
     void startActivation();
     void finishActibation();
+    void getConnStatus(bool status);               //ПОлучение статуса соедиения
+    void finishExecute();                          //Завершение процедуры
+
+    void on_pushButtonClose_clicked();
 
 private:
+    void createUI();                    // Первоначальная настройка внешнего вида
     void createModelTerminals();        //Создание модели терминалов
     void getConnInfo(int terminal_id);  //Параметры подключения к АЗС
     bool validateServer();              //Проверка доступности сервера

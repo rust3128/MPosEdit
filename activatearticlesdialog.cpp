@@ -14,9 +14,7 @@ ActivateArticlesDialog::ActivateArticlesDialog(int user_id, QWidget *parent) :
 {
     ui->setupUi(this);
     tcpSocket = new QTcpSocket(this);
-    ui->labelTerminalName->setText("Терминал не указан...");
-    ui->labelConnAviable->hide();
-    ui->commandLinkButton->setEnabled(false);
+    createUI();
     createModelTerminals();
     currentUser = user_id;
 
@@ -25,6 +23,15 @@ ActivateArticlesDialog::ActivateArticlesDialog(int user_id, QWidget *parent) :
 ActivateArticlesDialog::~ActivateArticlesDialog()
 {
     delete ui;
+}
+
+void ActivateArticlesDialog::createUI()
+{
+    ui->labelTerminalName->setText("Терминал не указан...");
+    ui->labelConnAviable->hide();
+    ui->commandLinkButton->setEnabled(false);
+    ui->groupBoxProgress->hide();
+    ui->frameActivation->hide();
 }
 
 void ActivateArticlesDialog::createModelTerminals()
@@ -85,7 +92,6 @@ void ActivateArticlesDialog::getConnInfo(int terminal_id)
     azsConnInfo.insert("server",q.value("SERVER_NAME").toString().trimmed());
     azsConnInfo.insert("basename",q.value("DB_NAME").toString().trimmed());
     azsConnInfo.insert("password",passConv(q.value("CON_PASSWORD").toString().trimmed()));
-    qInfo(logInfo()) << azsConnInfo;
 
 }
 
@@ -111,14 +117,17 @@ bool ActivateArticlesDialog::validateServer()
 void ActivateArticlesDialog::on_commandLinkButton_clicked()
 {
     ActivateArticles *articles = new ActivateArticles(azsConnInfo);
-    QThread *thread = new QThread();
+    QThread *thread = new QThread(this);
+
+
 
     connect(thread,&QThread::started,this,&ActivateArticlesDialog::startActivation);
     connect(thread,&QThread::started,articles,&ActivateArticles::activadedGo);
     connect(thread,&QThread::finished,this,&ActivateArticlesDialog::finishActibation);
 
     connect(articles,&ActivateArticles::finActivated,thread,&QThread::terminate,Qt::DirectConnection);
-
+    connect(articles,&ActivateArticles::sendConnStatus,this,&ActivateArticlesDialog::getConnStatus,Qt::QueuedConnection);
+    connect(articles,&ActivateArticles::sendExecStatus,this,&ActivateArticlesDialog::finishExecute,Qt::QueuedConnection);
 
     thread->start();
     articles->moveToThread(thread);
@@ -127,9 +136,39 @@ void ActivateArticlesDialog::on_commandLinkButton_clicked()
 void ActivateArticlesDialog::startActivation()
 {
     qInfo(logInfo()) << "Процесс пошел....";
+    ui->labelStatusConn->clear();
+    ui->labelStatusActivation->clear();
+    ui->groupBoxProgress->show();
 }
 
 void ActivateArticlesDialog::finishActibation()
 {
-    qInfo(logInfo()) << "Процесс пришел.";
+    qInfo(logInfo()) << "Процесс завершился.";
+}
+
+void ActivateArticlesDialog::getConnStatus(bool status)
+{
+    if(status){
+        ui->labelStatusConn->setStyleSheet("color: green");
+        ui->labelStatusConn->setText("Соедиение установлено!");
+        ui->progressBar->hide();
+        ui->frameActivation->show();
+    } else {
+        ui->labelStatusConn->setStyleSheet("color: red");
+        ui->labelStatusConn->setText("Не возможно соединится с базой АЗС!");
+    }
+
+}
+
+void ActivateArticlesDialog::finishExecute()
+{
+    ui->progressBar_3->hide();
+    ui->labelStatusActivation->setStyleSheet("color: green");
+    ui->labelStatusActivation->setText("Товары активированы!");
+}
+
+
+void ActivateArticlesDialog::on_pushButtonClose_clicked()
+{
+    this->reject();
 }
