@@ -32,6 +32,8 @@ private slots:
 
     void on_pushButtonClose_clicked();
 
+    void on_pushButtonOtherAzs_clicked();
+
 private:
     void createUI();                    // Первоначальная настройка внешнего вида
     void createModelTerminals();        //Создание модели терминалов

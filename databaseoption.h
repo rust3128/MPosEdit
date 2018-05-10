@@ -42,6 +42,7 @@ bool createOptionsTables()
                ")";
     listSQL << "INSERT INTO `logtypes`(`LOGTYPE_TEXT`) VALUES ('Удаление продажи')";
     listSQL << "INSERT INTO `logtypes`(`LOGTYPE_TEXT`) VALUES ('Восстановление продажи')";
+    listSQL << "INSERT INTO `logtypes`(`LOGTYPE_TEXT`) VALUES ('Активация товаров')";
     /// Создание таблицы логирования
     listSQL << "CREATE TABLE `logs` ( "
                "`log_id`        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
@@ -49,8 +50,8 @@ bool createOptionsTables()
                "`operator_id`	INTEGER NOT NULL, "
                "`dat`           TEXT NOT NULL, "
                "`terminal_id`	INTEGER NOT NULL, "
-               "`shift_id`      INTEGER NOT NULL, "
-               "`check_num` 	INTEGER NOT NULL, "
+               "`shift_id`      INTEGER, "
+               "`check_num` 	INTEGER, "
                "`sql`           BLOB)";
 
 

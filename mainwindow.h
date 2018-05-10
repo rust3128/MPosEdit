@@ -33,6 +33,8 @@ private slots:
 
     void on_actionActivateArticles_triggered();
 
+    void on_actionLostCheck_triggered();
+
 private:
     void showLoginDialog();             //Отображение Диалога пользователя
     void createStatusBar();             //Создание строки состояния

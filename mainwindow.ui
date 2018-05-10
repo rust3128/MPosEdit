@@ -115,6 +115,7 @@
     <property name="title">
      <string>Операции</string>
     </property>
+    <addaction name="actionLostCheck"/>
     <addaction name="actionClearSaleorders"/>
     <addaction name="actionActivateArticles"/>
     <addaction name="separator"/>
@@ -147,6 +148,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionLostCheck"/>
    <addaction name="actionClearSaleorders"/>
    <addaction name="actionActivateArticles"/>
   </widget>
@@ -211,6 +213,18 @@
    </property>
    <property name="statusTip">
     <string>Установка активности товара с не нулевым остатком</string>
+   </property>
+  </action>
+  <action name="actionLostCheck">
+   <property name="icon">
+    <iconset resource="resourse.qrc">
+     <normaloff>:/Image/lost.png</normaloff>:/Image/lost.png</iconset>
+   </property>
+   <property name="text">
+    <string>Восстановление продажи</string>
+   </property>
+   <property name="statusTip">
+    <string>Восстановление продажи</string>
    </property>
   </action>
  </widget>

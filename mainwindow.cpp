@@ -8,6 +8,7 @@
 #include "connectionlistdialog.h"
 #include "usersdialog.h"
 #include "activatearticlesdialog.h"
+#include "lostcheckdialog.h"
 #include <QMessageBox>
 #include <QDebug>
 #include <QSqlError>
@@ -178,7 +179,7 @@ void MainWindow::on_actionProtokol_triggered()
 {
     LogsDialog *logsDlg = new LogsDialog();
     this->setCentralWidget(logsDlg);
-    this->setWindowTitle(this->windowTitle()+". Протокол операций");
+    this->setWindowTitle(this->windowTitle()+"Протокол операций");
     logsDlg->exec();
 }
 
@@ -192,6 +193,14 @@ void MainWindow::on_actionActivateArticles_triggered()
 {
     ActivateArticlesDialog *activArtDlg = new ActivateArticlesDialog(currentUser.value("user_id").toInt());
     this->setCentralWidget(activArtDlg);
-    this->setWindowTitle(this->windowTitle()+". Активация товаров с не нулевым остатком.");
+    this->setWindowTitle(this->windowTitle()+"Активация товаров с не нулевым остатком.");
     activArtDlg->exec();
+}
+
+void MainWindow::on_actionLostCheck_triggered()
+{
+    LostCheckDialog *lostDlg = new LostCheckDialog(currentUser.value("user_id").toInt());
+    this->setCentralWidget(lostDlg);
+    this->setWindowTitle(this->windowTitle()+"Восстановление продаж.");
+    lostDlg->exec();
 }

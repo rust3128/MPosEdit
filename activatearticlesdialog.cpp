@@ -4,6 +4,7 @@
 #include "loggingcategories.h"
 #include "activatearticles.h"
 #include "passconv.h"
+#include "insertlog.h"
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QThread>
@@ -27,6 +28,7 @@ ActivateArticlesDialog::~ActivateArticlesDialog()
 
 void ActivateArticlesDialog::createUI()
 {
+    ui->lineEditTerminalID->clear();
     ui->labelTerminalName->setText("Терминал не указан...");
     ui->labelConnAviable->hide();
     ui->commandLinkButton->setEnabled(false);
@@ -135,15 +137,19 @@ void ActivateArticlesDialog::on_commandLinkButton_clicked()
 
 void ActivateArticlesDialog::startActivation()
 {
-    qInfo(logInfo()) << "Процесс пошел....";
     ui->labelStatusConn->clear();
     ui->labelStatusActivation->clear();
     ui->groupBoxProgress->show();
+    ui->pushButtonClose->setEnabled(false);
+    ui->pushButtonOtherAzs->setEnabled(false);
 }
 
 void ActivateArticlesDialog::finishActibation()
 {
-    qInfo(logInfo()) << "Процесс завершился.";
+    ui->pushButtonClose->setEnabled(true);
+    ui->pushButtonOtherAzs->setEnabled(true);
+    qInfo(logInfo()) << "АЗС" << currentTerminal << "Активация товаров с не нулевым остатком.";
+    insertLog(3,currentUser,currentTerminal,0,0,"");
 }
 
 void ActivateArticlesDialog::getConnStatus(bool status)
@@ -165,10 +171,16 @@ void ActivateArticlesDialog::finishExecute()
     ui->progressBar_3->hide();
     ui->labelStatusActivation->setStyleSheet("color: green");
     ui->labelStatusActivation->setText("Товары активированы!");
+
 }
 
 
 void ActivateArticlesDialog::on_pushButtonClose_clicked()
 {
     this->reject();
+}
+
+void ActivateArticlesDialog::on_pushButtonOtherAzs_clicked()
+{
+    createUI();
 }
