@@ -41,7 +41,7 @@ void ClearSaleordersDialog::createModelTerminals()
 
 void ClearSaleordersDialog::createModelShifts()
 {
-    QString strSQL = QString("select s.SHIFT_ID, s.DATOPEN, s.DATCLOSE from SHIFTS s "
+    QString strSQL = QString("select s.SHIFT_ID, s.ZNUMBER, s.DATOPEN, s.DATCLOSE, s.OPERATOR_ID  from SHIFTS s "
                              "where s.TERMINAL_ID=%1 "
                              "order by s.SHIFT_ID DESC")
             .arg(currentTerminal);
@@ -98,7 +98,7 @@ void ClearSaleordersDialog::on_lineEditShiftID_textChanged(const QString &arg1)
     for(int i =0; i<modelShifts->rowCount();++i){
         if(shift == modelShifts->data(modelShifts->index(i,0)).toInt()){
             ui->labelShiftData->setText("Смена № "+modelShifts->data(modelShifts->index(i,0)).toString() +
-                    " От: "+modelShifts->data(modelShifts->index(i,1)).toDateTime().toString("dd.MM.yyyy hh.mm"));
+                    " От: "+modelShifts->data(modelShifts->index(i,2)).toDateTime().toString("dd.MM.yyyy hh.mm"));
             currentShift=shift;
             ui->groupBoxCheck->show();
             return;

@@ -20,12 +20,13 @@ SelectShiftDialog::~SelectShiftDialog()
 void SelectShiftDialog::createUI()
 {
     modelShifts->setHeaderData(0,Qt::Horizontal,tr("Смена"));
-    modelShifts->setHeaderData(1,Qt::Horizontal,tr("Открыта"));
-    modelShifts->setHeaderData(2,Qt::Horizontal,tr("Закрыта"));
+    modelShifts->setHeaderData(1,Qt::Horizontal, tr("Z-отчет"));
+    modelShifts->setHeaderData(2,Qt::Horizontal,tr("Открыта"));
+    modelShifts->setHeaderData(3,Qt::Horizontal,tr("Закрыта"));
 
     ui->tableView->setModel(modelShifts);
     ui->tableView->verticalHeader()->hide();
-
+    ui->tableView->hideColumn(4);
     ui->tableView->resizeColumnsToContents();
     ui->tableView->verticalHeader()->setDefaultSectionSize(ui->tableView->verticalHeader()->minimumSectionSize());
 }

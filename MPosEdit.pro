@@ -37,7 +37,8 @@ SOURCES += \
     connectionlistdialog.cpp \
     tanlemodelconnect.cpp \
     activatearticlesdialog.cpp \
-    activatearticles.cpp
+    activatearticles.cpp \
+    lostcheckdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -55,7 +56,8 @@ HEADERS += \
     tanlemodelconnect.h \
     activatearticlesdialog.h \
     passconv.h \
-    activatearticles.h
+    activatearticles.h \
+    lostcheckdialog.h
 
 FORMS += \
         mainwindow.ui \
@@ -67,7 +69,8 @@ FORMS += \
     usersdialog.ui \
     logsdialog.ui \
     connectionlistdialog.ui \
-    activatearticlesdialog.ui
+    activatearticlesdialog.ui \
+    lostcheckdialog.ui
 
 RESOURCES += \
     resourse.qrc

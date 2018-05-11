@@ -30,6 +30,8 @@ void LostCheckDialog::createUI()
     ui->labelShiftData->setText("Смена не выбрана...");
     ui->labelConnAviable->hide();
     ui->groupBoxShifts->hide();
+    ui->commandLinkButton->hide();
+
 }
 
 
@@ -44,7 +46,7 @@ void LostCheckDialog::createModelTerminals()
 
 void LostCheckDialog::createModelShifts()
 {
-    QString strSQL = QString("select s.SHIFT_ID, s.DATOPEN, s.DATCLOSE from SHIFTS s "
+    QString strSQL = QString("select s.SHIFT_ID, s.ZNUMBER, s.DATOPEN, s.DATCLOSE, s.OPERATOR_ID  from SHIFTS s "
                              "where s.TERMINAL_ID=%1 "
                              "order by s.SHIFT_ID DESC")
             .arg(currentTerminal);
@@ -57,6 +59,7 @@ void LostCheckDialog::createModelShifts()
 
 
 
+
 void LostCheckDialog::on_lineEditTerminalID_textChanged(const QString &arg1)
 {
     int terminal = arg1.toInt();
@@ -66,7 +69,7 @@ void LostCheckDialog::on_lineEditTerminalID_textChanged(const QString &arg1)
             currentTerminal=terminal;
             getConnInfo(currentTerminal);
             if(validateServer()){
-                ui->groupBoxShifts->show();
+                ui->commandLinkButton->show();
                 createModelShifts();
             }
 
@@ -127,6 +130,8 @@ bool LostCheckDialog::validateServer()
     }
 }
 
+
+
 void LostCheckDialog::getSelectedShift(int shiftID)
 {
     currentShift = shiftID;
@@ -146,12 +151,52 @@ void LostCheckDialog::on_lineEditShiftID_textChanged(const QString &arg1)
     for(int i =0; i<modelShifts->rowCount();++i){
         if(shift == modelShifts->data(modelShifts->index(i,0)).toInt()){
             ui->labelShiftData->setText("Смена № "+modelShifts->data(modelShifts->index(i,0)).toString() +
-                    " От: "+modelShifts->data(modelShifts->index(i,1)).toDateTime().toString("dd.MM.yyyy hh.mm"));
+                    " От: "+modelShifts->data(modelShifts->index(i,2)).toDateTime().toString("dd.MM.yyyy hh.mm"));
             currentShift=shift;
 
             return;
         }
     }
     ui->labelShiftData->setText("Смена не выбрана...");
+}
+
+void LostCheckDialog::on_commandLinkButton_clicked()
+{
+    ui->groupBoxShifts->show();
+    azsConnections();
+    possUICreate();
+    paytypesUICreate();
+}
+
+void LostCheckDialog::azsConnections()
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QIBASE",azsConnInfo.value("conName"));
+
+    db.setHostName(azsConnInfo.value("server"));
+    db.setDatabaseName(azsConnInfo.value("basename"));
+    db.setUserName("SYSDBA");
+    db.setPassword(azsConnInfo.value("password"));
+    db.open();
+}
+
+void LostCheckDialog::possUICreate()
+{
+    QString strSQL = QString("SELECT p.POS_ID, p.NAME FROM POSS p where p.TERMINAL_ID=%1 and p.ISACTIVE='T'")
+            .arg(currentTerminal);
+    QSqlDatabase dbcenter = QSqlDatabase::database("central");
+    modelPOSs = new QSqlQueryModel();
+    modelPOSs->setQuery(strSQL,dbcenter);
+    ui->comboBoxPoss->setModel(modelPOSs);
+    ui->comboBoxPoss->setModelColumn(1);
 
 }
+
+void LostCheckDialog::paytypesUICreate()
+{
+    QSqlDatabase azs = QSqlDatabase::database(azsConnInfo.value("conName"));
+    modelPaytypes = new QSqlQueryModel();
+    modelPaytypes->setQuery("SELECT p.PAYTYPE_ID, p.NAME, p.DLLNAME FROM PAYTYPES p WHERE p.PAYTYPE_ID>0 and p.ISACTIVE='T'",azs);
+    ui->comboBoxPaytype->setModel(modelPaytypes);
+    ui->comboBoxPaytype->setModelColumn(1);
+}
+
