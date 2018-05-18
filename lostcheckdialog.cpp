@@ -17,6 +17,7 @@ LostCheckDialog::LostCheckDialog(int user_id, QWidget *parent) :
     createUI();
     createModelTerminals();
     currentUser = user_id;
+    connect(this,&LostCheckDialog::getPrice,this,&LostCheckDialog::setPrice);
 }
 
 LostCheckDialog::~LostCheckDialog()
@@ -166,6 +167,7 @@ void LostCheckDialog::on_commandLinkButton_clicked()
     azsConnections();
     possUICreate();
     paytypesUICreate();
+    tanksFuelsUICreate();
 }
 
 void LostCheckDialog::azsConnections()
@@ -178,6 +180,8 @@ void LostCheckDialog::azsConnections()
     db.setPassword(azsConnInfo.value("password"));
     db.open();
 }
+
+
 
 void LostCheckDialog::possUICreate()
 {
@@ -198,5 +202,87 @@ void LostCheckDialog::paytypesUICreate()
     modelPaytypes->setQuery("SELECT p.PAYTYPE_ID, p.NAME, p.DLLNAME FROM PAYTYPES p WHERE p.PAYTYPE_ID>0 and p.ISACTIVE='T'",azs);
     ui->comboBoxPaytype->setModel(modelPaytypes);
     ui->comboBoxPaytype->setModelColumn(1);
+    ui->comboBoxPaytype->setCurrentIndex(-1);
+    showClientsInfo(false);
+
+
 }
 
+void LostCheckDialog::tanksFuelsUICreate()
+{
+    QSqlDatabase azs = QSqlDatabase::database(azsConnInfo.value("conName"));
+    modelTanks = new QSqlQueryModel();
+    modelTanks->setQuery("select t.TANK_ID, f.FUEL_ID, f.SHORTNAME from tanks t "
+                         "LEFT JOIN FUELS f ON f.FUEL_ID = t.FUEL_ID "
+                         "where t.ISACTIVE='T' "
+                         "order by t.TANK_ID",azs);
+    ui->comboBoxFuels->setModel(modelTanks);
+    ui->comboBoxFuels->setModelColumn(2);
+    ui->comboBoxFuels->setCurrentIndex(-1);
+
+}
+
+void LostCheckDialog::showClientsInfo(bool sh)
+{
+    if(!sh){
+        ui->labelClient->hide();
+        ui->labelInfo->hide();
+        ui->lineEditClientCode->hide();
+        ui->lineEditClientInfo->hide();
+    } else {
+        ui->labelClient->show();
+        ui->labelInfo->show();
+        ui->lineEditClientCode->show();
+        ui->lineEditClientInfo->show();
+    }
+
+}
+
+
+
+void LostCheckDialog::on_comboBoxPaytype_activated(int idx)
+{
+//    idxModel = modelUsers->index(idx,0,QModelIndex());
+    paytypeID = modelPaytypes->data(modelPaytypes->index(idx,0)).toInt();
+    QString dllName = modelPaytypes->data(modelPaytypes->index(idx,2)).toString();
+    if(dllName.toLower() == "unipos" || dllName.toLower() == "clientsdb" ) {
+        showClientsInfo(true);
+    } else {
+        showClientsInfo(false);
+    }
+
+}
+
+void LostCheckDialog::on_comboBoxFuels_activated(int idx)
+{
+    tankID = modelTanks->data(modelTanks->index(idx,0)).toInt();
+    fuelID = modelTanks->data(modelTanks->index(idx,1)).toInt();
+    ui->labelTanks->setText("Резервуар № "+QString::number(tankID));
+
+    QSqlDatabase azs = QSqlDatabase::database(azsConnInfo.value("conName"));
+    modelTRK = new QSqlQueryModel();
+    QString strSQL = QString("select k.DISPENSER_ID AS TRK, k.TRK_ID as KRAN from TRKS k "
+                             "where k.TANK_ID=%1 "
+                             "order by k.DISPENSER_ID").arg(tankID);
+    modelTRK->setQuery(strSQL,azs);
+    ui->comboBoxTRK->setModel(modelTRK);
+    ui->comboBoxTRK->setModelColumn(0);
+    ui->comboBoxTRK->setCurrentIndex(-1);
+    ui->lineEditKran->clear();
+}
+
+void LostCheckDialog::on_comboBoxTRK_activated(int idx)
+{
+    trkID=modelTRK->data(modelTRK->index(idx,0)).toInt();
+    kranID=modelTRK->data(modelTRK->index(idx,1)).toInt();
+    ui->lineEditKran->setText(QString::number(kranID));
+}
+
+void LostCheckDialog::setPrice()
+{
+    if(currentShift == 0 || fuelID == 0) {
+        price=0.00;
+    } else {
+
+    }
+}
