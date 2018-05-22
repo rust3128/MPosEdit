@@ -84,14 +84,14 @@ font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="2" column="0" colspan="2">
     <widget class="QCommandLinkButton" name="commandLinkButton">
      <property name="text">
       <string>Получить информацию об АЗС.</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="3" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBoxShifts">
      <property name="title">
       <string>Данные для восстановления</string>
@@ -301,6 +301,13 @@ font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
        </layout>
       </item>
       <item row="5" column="0" colspan="3">
+       <widget class="Line" name="line_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0" colspan="3">
        <layout class="QHBoxLayout" name="horizontalLayout_7">
         <item>
          <widget class="QLabel" name="label_5">
@@ -345,6 +352,23 @@ font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditSum">
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>Сумма скидки</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEditDiscount">
           <property name="maximumSize">
            <size>
             <width>80</width>

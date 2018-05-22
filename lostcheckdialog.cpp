@@ -14,10 +14,12 @@ LostCheckDialog::LostCheckDialog(int user_id, QWidget *parent) :
 {
     ui->setupUi(this);
     tcpSocket = new QTcpSocket(this);
+    initLostCheck();
     createUI();
     createModelTerminals();
     currentUser = user_id;
     connect(this,&LostCheckDialog::getPrice,this,&LostCheckDialog::setPrice);
+    connect(this,&LostCheckDialog::calcSumm,this,&LostCheckDialog::setSumm);
 }
 
 LostCheckDialog::~LostCheckDialog()
@@ -25,8 +27,50 @@ LostCheckDialog::~LostCheckDialog()
     delete ui;
 }
 
+void LostCheckDialog::initLostCheck()
+{
+    lostCheck.insert("TERMINAL_ID",0);
+    lostCheck.insert("SHIFT_ID",0);
+    lostCheck.insert("DISPENSER_ID",0);
+    lostCheck.insert("TRK_ID",0);
+    lostCheck.insert("TANK_ID",0);
+    lostCheck.insert("FUEL_ID",0);
+    lostCheck.insert("GIVE",0);
+    lostCheck.insert("ORDERED",0);
+    lostCheck.insert("SUMMA",0);
+    lostCheck.insert("CASH",0);
+    lostCheck.insert("DISCOUNTSUMMA",0);
+    lostCheck.insert("PAYTYPE_ID",0);
+    lostCheck.insert("NUM_CHECK",0);
+    lostCheck.insert("NUM_CHECK_RETURN",0);
+    lostCheck.insert("TRANSACTION_ID",0);
+    lostCheck.insert("SEC",0);
+    lostCheck.insert("ISLAST","T");
+    lostCheck.insert("INFO_CODE",0);
+    lostCheck.insert("INFO_TEXT","");
+    lostCheck.insert("POS_ID",0);
+    lostCheck.insert("ZNUMBER",0);
+    lostCheck.insert("OPERATOR_ID",0);
+    lostCheck.insert("SALEORDER_ID",0);
+    lostCheck.insert("PRICE",0);
+    lostCheck.insert("ISBEFOREPAY","F");
+    lostCheck.insert("POSTRANSACTION_ID",0);
+    lostCheck.insert("POSTRNRETURN_ID",0);
+    lostCheck.insert("SHARE_ID",0);
+    lostCheck.insert("MPOSCHECK_ID",0);
+    lostCheck.insert("PAYTYPE_ID2",0);
+    lostCheck.insert("SUMMA2",0);
+    lostCheck.insert("DISCOUNTSUMMA2",0);
+    lostCheck.insert("DAT",0);
+    lostCheck.insert("GOV_NUMBER","");
+    lostCheck.insert("BONUSCARD","");
+}
+
+
 void LostCheckDialog::createUI()
 {
+
+
     ui->labelTerminalName->setText("Терминал не указан...");
     ui->labelShiftData->setText("Смена не выбрана...");
     ui->labelConnAviable->hide();
@@ -50,7 +94,7 @@ void LostCheckDialog::createModelShifts()
     QString strSQL = QString("select s.SHIFT_ID, s.ZNUMBER, s.DATOPEN, s.DATCLOSE, s.OPERATOR_ID  from SHIFTS s "
                              "where s.TERMINAL_ID=%1 "
                              "order by s.SHIFT_ID DESC")
-            .arg(currentTerminal);
+            .arg(lostCheck.value("TERMINAL_ID").toInt());
     QSqlDatabase dbcenter = QSqlDatabase::database("central");
     modelShifts = new QSqlQueryModel();
     modelShifts->setQuery(strSQL,dbcenter);
@@ -67,8 +111,9 @@ void LostCheckDialog::on_lineEditTerminalID_textChanged(const QString &arg1)
     for(int i = 0;i<modelTerminals->rowCount();++i){
         if(terminal == modelTerminals->data(modelTerminals->index(i,0)).toInt()){
             ui->labelTerminalName->setText(modelTerminals->data(modelTerminals->index(i,1)).toString());
-            currentTerminal=terminal;
-            getConnInfo(currentTerminal);
+            lostCheck["TERMINAL_ID"]=terminal;
+//            currentTerminal=terminal;
+            getConnInfo(lostCheck.value("TERMINAL_ID").toInt());
             if(validateServer()){
                 ui->commandLinkButton->show();
                 createModelShifts();
@@ -108,7 +153,8 @@ void LostCheckDialog::on_toolButtonSelectTerminal_clicked()
 
 void LostCheckDialog::getSelectedTerminal(int termID)
 {
-    currentTerminal=termID;
+    lostCheck["TERMINAL_ID"]=termID;
+//    currentTerminal=termID;
     ui->lineEditTerminalID->setText(QString::number(termID));
     ui->lineEditShiftID->setFocus();
 }
@@ -135,7 +181,8 @@ bool LostCheckDialog::validateServer()
 
 void LostCheckDialog::getSelectedShift(int shiftID)
 {
-    currentShift = shiftID;
+    lostCheck["SHIFT_ID"]=shiftID;
+//    currentShift = shiftID;
     ui->lineEditShiftID->setText(QString::number(shiftID));
 }
 
@@ -153,8 +200,8 @@ void LostCheckDialog::on_lineEditShiftID_textChanged(const QString &arg1)
         if(shift == modelShifts->data(modelShifts->index(i,0)).toInt()){
             ui->labelShiftData->setText("Смена № "+modelShifts->data(modelShifts->index(i,0)).toString() +
                     " От: "+modelShifts->data(modelShifts->index(i,2)).toDateTime().toString("dd.MM.yyyy hh.mm"));
-            currentShift=shift;
-
+            lostCheck["SHIFT_ID"]=shift;
+            emit getPrice();
             return;
         }
     }
@@ -186,7 +233,7 @@ void LostCheckDialog::azsConnections()
 void LostCheckDialog::possUICreate()
 {
     QString strSQL = QString("SELECT p.POS_ID, p.NAME FROM POSS p where p.TERMINAL_ID=%1 and p.ISACTIVE='T'")
-            .arg(currentTerminal);
+            .arg(lostCheck.value("TERMINAL_ID").toInt());
     QSqlDatabase dbcenter = QSqlDatabase::database("central");
     modelPOSs = new QSqlQueryModel();
     modelPOSs->setQuery(strSQL,dbcenter);
@@ -214,7 +261,7 @@ void LostCheckDialog::tanksFuelsUICreate()
     modelTanks = new QSqlQueryModel();
     modelTanks->setQuery("select t.TANK_ID, f.FUEL_ID, f.SHORTNAME from tanks t "
                          "LEFT JOIN FUELS f ON f.FUEL_ID = t.FUEL_ID "
-                         "where t.ISACTIVE='T' "
+                         "where t.ISACTIVE='T' AND t.ISACTIVE='T' "
                          "order by t.TANK_ID",azs);
     ui->comboBoxFuels->setModel(modelTanks);
     ui->comboBoxFuels->setModelColumn(2);
@@ -240,10 +287,11 @@ void LostCheckDialog::showClientsInfo(bool sh)
 
 
 
+
 void LostCheckDialog::on_comboBoxPaytype_activated(int idx)
 {
 //    idxModel = modelUsers->index(idx,0,QModelIndex());
-    paytypeID = modelPaytypes->data(modelPaytypes->index(idx,0)).toInt();
+    lostCheck["PAYTYPE_ID"]=modelPaytypes->data(modelPaytypes->index(idx,0)).toInt();
     QString dllName = modelPaytypes->data(modelPaytypes->index(idx,2)).toString();
     if(dllName.toLower() == "unipos" || dllName.toLower() == "clientsdb" ) {
         showClientsInfo(true);
@@ -255,15 +303,16 @@ void LostCheckDialog::on_comboBoxPaytype_activated(int idx)
 
 void LostCheckDialog::on_comboBoxFuels_activated(int idx)
 {
-    tankID = modelTanks->data(modelTanks->index(idx,0)).toInt();
-    fuelID = modelTanks->data(modelTanks->index(idx,1)).toInt();
-    ui->labelTanks->setText("Резервуар № "+QString::number(tankID));
+    lostCheck["TANK_ID"]=modelTanks->data(modelTanks->index(idx,0)).toInt();
+    lostCheck["FUEL_ID"]=modelTanks->data(modelTanks->index(idx,1)).toInt();
+    ui->labelTanks->setText("Резервуар № "+lostCheck.value("TANK_ID").toString());
+    emit getPrice();
 
     QSqlDatabase azs = QSqlDatabase::database(azsConnInfo.value("conName"));
     modelTRK = new QSqlQueryModel();
     QString strSQL = QString("select k.DISPENSER_ID AS TRK, k.TRK_ID as KRAN from TRKS k "
                              "where k.TANK_ID=%1 "
-                             "order by k.DISPENSER_ID").arg(tankID);
+                             "order by k.DISPENSER_ID").arg(lostCheck.value("TANK_ID").toInt());
     modelTRK->setQuery(strSQL,azs);
     ui->comboBoxTRK->setModel(modelTRK);
     ui->comboBoxTRK->setModelColumn(0);
@@ -273,16 +322,42 @@ void LostCheckDialog::on_comboBoxFuels_activated(int idx)
 
 void LostCheckDialog::on_comboBoxTRK_activated(int idx)
 {
-    trkID=modelTRK->data(modelTRK->index(idx,0)).toInt();
-    kranID=modelTRK->data(modelTRK->index(idx,1)).toInt();
-    ui->lineEditKran->setText(QString::number(kranID));
+    lostCheck["DISPENSER_ID"]=modelTRK->data(modelTRK->index(idx,0)).toInt();
+    lostCheck["TRK_ID"]=modelTRK->data(modelTRK->index(idx,1)).toInt();
+    ui->lineEditKran->setText(lostCheck.value("TRK_ID").toString());
 }
 
 void LostCheckDialog::setPrice()
 {
-    if(currentShift == 0 || fuelID == 0) {
+    if(lostCheck.value("SHIFT_ID").toInt() == 0 || lostCheck.value("TANK_ID").toInt() == 0) {
         price=0.00;
+        ui->lineEditPrice->setText("0.00");
     } else {
+        QSqlDatabase azs = QSqlDatabase::database(azsConnInfo.value("conName"));
+        QSqlQuery q = QSqlQuery(azs);
+        QString strSQL = QString("select t.PRICE from TANKSALDOS t "
+                                   "where t.SHIFT_ID=%1 and t.TANK_ID=%2")
+                .arg(lostCheck.value("SHIFT_ID").toInt())
+                .arg(lostCheck.value("TANK_ID").toInt());
 
+        q.exec(strSQL);
+        q.next();
+        price=q.value(0).toDouble();
+        ui->lineEditPrice->setText(q.value(0).toString());
     }
+}
+
+void LostCheckDialog::setSumm()
+{
+    ui->lineEditSum->setText(QString::number(ui->lineEditPrice->text().toDouble()*ui->lineEditGive->text().toDouble(),'f',2));
+}
+
+void LostCheckDialog::on_lineEditPrice_textChanged(const QString &arg1)
+{
+    emit calcSumm();
+}
+
+void LostCheckDialog::on_lineEditGive_textChanged(const QString &arg1)
+{
+    emit calcSumm();
 }
