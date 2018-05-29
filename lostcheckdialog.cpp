@@ -6,6 +6,7 @@
 #include "insertlog.h"
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QDateTime>
 
 
 LostCheckDialog::LostCheckDialog(int user_id, QWidget *parent) :
@@ -75,7 +76,8 @@ void LostCheckDialog::createUI()
     ui->labelShiftData->setText("Смена не выбрана...");
     ui->labelConnAviable->hide();
     ui->groupBoxShifts->hide();
-    ui->commandLinkButton->hide();
+    ui->pushButtonChecAzs->hide();
+    ui->dateTimeCheck->setDateTime(QDateTime::currentDateTime());
 
 }
 
@@ -115,7 +117,7 @@ void LostCheckDialog::on_lineEditTerminalID_textChanged(const QString &arg1)
 //            currentTerminal=terminal;
             getConnInfo(lostCheck.value("TERMINAL_ID").toInt());
             if(validateServer()){
-                ui->commandLinkButton->show();
+                ui->pushButtonChecAzs->show();
                 createModelShifts();
             }
 
@@ -201,6 +203,7 @@ void LostCheckDialog::on_lineEditShiftID_textChanged(const QString &arg1)
             ui->labelShiftData->setText("Смена № "+modelShifts->data(modelShifts->index(i,0)).toString() +
                     " От: "+modelShifts->data(modelShifts->index(i,2)).toDateTime().toString("dd.MM.yyyy hh.mm"));
             lostCheck["SHIFT_ID"]=shift;
+            shiftDate = modelShifts->data(modelShifts->index(i,2)).toDate();
             emit getPrice();
             return;
         }
@@ -208,14 +211,7 @@ void LostCheckDialog::on_lineEditShiftID_textChanged(const QString &arg1)
     ui->labelShiftData->setText("Смена не выбрана...");
 }
 
-void LostCheckDialog::on_commandLinkButton_clicked()
-{
-    ui->groupBoxShifts->show();
-    azsConnections();
-    possUICreate();
-    paytypesUICreate();
-    tanksFuelsUICreate();
-}
+
 
 void LostCheckDialog::azsConnections()
 {
@@ -344,7 +340,9 @@ void LostCheckDialog::setPrice()
         q.next();
         price=q.value(0).toDouble();
         ui->lineEditPrice->setText(q.value(0).toString());
+        ui->dateTimeCheck->setDate(shiftDate);
     }
+
 }
 
 void LostCheckDialog::setSumm()
@@ -352,12 +350,21 @@ void LostCheckDialog::setSumm()
     ui->lineEditSum->setText(QString::number(ui->lineEditPrice->text().toDouble()*ui->lineEditGive->text().toDouble(),'f',2));
 }
 
-void LostCheckDialog::on_lineEditPrice_textChanged(const QString &arg1)
+void LostCheckDialog::on_lineEditPrice_textChanged()
 {
     emit calcSumm();
 }
 
-void LostCheckDialog::on_lineEditGive_textChanged(const QString &arg1)
+void LostCheckDialog::on_lineEditGive_textChanged()
 {
     emit calcSumm();
+}
+
+void LostCheckDialog::on_pushButtonChecAzs_clicked()
+{
+    ui->groupBoxShifts->show();
+    azsConnections();
+    possUICreate();
+    paytypesUICreate();
+    tanksFuelsUICreate();
 }

@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QSqlQueryModel>
 #include <QTcpSocket>
+#include <QDate>
 
 
 namespace Ui {
@@ -29,15 +30,16 @@ private slots:
     void getSelectedShift(int shiftID);
     void on_toolButtonSelectShift_clicked();
     void on_lineEditShiftID_textChanged(const QString &arg1);
-    void on_commandLinkButton_clicked();
     void on_comboBoxPaytype_activated(int idx);
     void on_comboBoxFuels_activated(int idx);
     void on_comboBoxTRK_activated(int idx);
     void setPrice();                    //Установка цены в поле ввода
     void setSumm();                     //Расчет суммы
-    void on_lineEditPrice_textChanged(const QString &arg1);
+    void on_lineEditPrice_textChanged();
 
-    void on_lineEditGive_textChanged(const QString &arg1);
+    void on_lineEditGive_textChanged();
+
+    void on_pushButtonChecAzs_clicked();
 
 private:
     void createUI();
@@ -54,14 +56,8 @@ private:
 private:
     Ui::LostCheckDialog *ui;
     QMap<QString, QVariant> lostCheck;  //Контейнер данных для формирования скрипта
-//    int currentTerminal=0;              //Выбранный терминал
-//    int currentShift=0;                 //Выбранная смена
+    QDate shiftDate;                    //Дата текущей смены
     int currentUser;                    //Текущий пользователь
-//    int paytypeID;                      //Вид оплаты
-//    int fuelID=0;                         //Вид топлива
-//    int tankID;                         //Резервуар
-//    int trkID;                          //ТРК
-//    int kranID;                         //Пистолет
     double price=0.00;                  //цена
     QSqlQueryModel *modelTerminals;     //Модель терминалов
     QSqlQueryModel *modelShifts;        //Модель смен

@@ -14,5 +14,8 @@
         <file>Image/connect.png</file>
         <file>Image/activate_articles.png</file>
         <file>Image/lost.png</file>
+        <file>Image/golostcheck.png</file>
+        <file>Image/sqlfile.png</file>
+        <file>Image/azs.png</file>
     </qresource>
 </RCC>
