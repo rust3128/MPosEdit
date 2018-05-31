@@ -7,6 +7,8 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDateTime>
+#include <QValidator>
+#include <QMessageBox>
 
 
 LostCheckDialog::LostCheckDialog(int user_id, QWidget *parent) :
@@ -32,36 +34,36 @@ void LostCheckDialog::initLostCheck()
 {
     lostCheck.insert("TERMINAL_ID",0);
     lostCheck.insert("SHIFT_ID",0);
-    lostCheck.insert("DISPENSER_ID",0);
+    lostCheck.insert("DISPENSER_ID",-1);
     lostCheck.insert("TRK_ID",0);
     lostCheck.insert("TANK_ID",0);
-    lostCheck.insert("FUEL_ID",0);
+    lostCheck.insert("FUEL_ID",-1);
     lostCheck.insert("GIVE",0);
     lostCheck.insert("ORDERED",0);
     lostCheck.insert("SUMMA",0);
     lostCheck.insert("CASH",0);
     lostCheck.insert("DISCOUNTSUMMA",0);
-    lostCheck.insert("PAYTYPE_ID",0);
+    lostCheck.insert("PAYTYPE_ID",-1);
     lostCheck.insert("NUM_CHECK",0);
     lostCheck.insert("NUM_CHECK_RETURN",0);
     lostCheck.insert("TRANSACTION_ID",0);
     lostCheck.insert("SEC",0);
     lostCheck.insert("ISLAST","T");
-    lostCheck.insert("INFO_CODE",0);
+    lostCheck.insert("INFO_CODE",-1);
     lostCheck.insert("INFO_TEXT","");
-    lostCheck.insert("POS_ID",0);
+    lostCheck.insert("POS_ID",1);
     lostCheck.insert("ZNUMBER",0);
-    lostCheck.insert("OPERATOR_ID",0);
-    lostCheck.insert("SALEORDER_ID",0);
+    lostCheck.insert("OPERATOR_ID",-1);
+    lostCheck.insert("SALEORDER_ID","GEN_ID(GEN_SALEORDERS, 1)");
     lostCheck.insert("PRICE",0);
     lostCheck.insert("ISBEFOREPAY","F");
     lostCheck.insert("POSTRANSACTION_ID",0);
     lostCheck.insert("POSTRNRETURN_ID",0);
     lostCheck.insert("SHARE_ID",0);
-    lostCheck.insert("MPOSCHECK_ID",0);
-    lostCheck.insert("PAYTYPE_ID2",0);
-    lostCheck.insert("SUMMA2",0);
-    lostCheck.insert("DISCOUNTSUMMA2",0);
+    lostCheck.insert("MPOSCHECK_ID",":CHECK_ID");
+    lostCheck.insert("PAYTYPE_ID2",1);
+    lostCheck.insert("SUMMA2",0.00);
+    lostCheck.insert("DISCOUNTSUMMA2",0.00);
     lostCheck.insert("DAT",0);
     lostCheck.insert("GOV_NUMBER","");
     lostCheck.insert("BONUSCARD","");
@@ -70,6 +72,13 @@ void LostCheckDialog::initLostCheck()
 
 void LostCheckDialog::createUI()
 {
+    QValidator *valTerminals = new QIntValidator(1, 999999999,this);
+//    QValidator *valDouble = new QDoubleValidator(0.00,9999999.99,2,this);
+    ui->lineEditTerminalID->setValidator(valTerminals);
+    ui->lineEditShiftID->setValidator(valTerminals);
+    ui->lineEditNumCheck->setValidator(valTerminals);
+//    ui->lineEditGive->setValidator(valDouble);
+//    ui->lineEditPrice->setValidator(valDouble);
 
 
     ui->labelTerminalName->setText("Терминал не указан...");
@@ -203,6 +212,8 @@ void LostCheckDialog::on_lineEditShiftID_textChanged(const QString &arg1)
             ui->labelShiftData->setText("Смена № "+modelShifts->data(modelShifts->index(i,0)).toString() +
                     " От: "+modelShifts->data(modelShifts->index(i,2)).toDateTime().toString("dd.MM.yyyy hh.mm"));
             lostCheck["SHIFT_ID"]=shift;
+            lostCheck["ZNUMBER"]=modelShifts->data(modelShifts->index(i,1)).toInt();
+            lostCheck["OPERATOR_ID"]=modelShifts->data(modelShifts->index(i,4)).toInt();
             shiftDate = modelShifts->data(modelShifts->index(i,2)).toDate();
             emit getPrice();
             return;
@@ -367,4 +378,113 @@ void LostCheckDialog::on_pushButtonChecAzs_clicked()
     possUICreate();
     paytypesUICreate();
     tanksFuelsUICreate();
+}
+
+
+void LostCheckDialog::generateScript()
+{
+    if(!validLostCheck()){
+        return;
+    }
+    lostCheck["NUM_CHECK"]=ui->lineEditNumCheck->text().toInt();
+    lostCheck["GIVE"] = lostCheck["ORDERED"] = ui->lineEditGive->text().toDouble();
+    lostCheck["SUMMA"]=ui->lineEditSum->text().toDouble();
+    lostCheck["DAT"]=ui->dateTimeCheck->dateTime().toString("yyyy/MM/dd hh:mm:ss");
+    if(ui->lineEditClientInfo->isVisible()){
+        lostCheck["INFO_CODE"]=ui->lineEditClientCode->text().toInt();
+        lostCheck["INFO_TEXT"]=ui->lineEditClientInfo->text().trimmed();
+    }
+
+    QMapIterator<QString, QVariant> i(lostCheck);
+    while (i.hasNext()) {
+        i.next();
+        qInfo(logInfo()) << i.key() << i.value().toString();
+    }
+
+
+}
+
+bool LostCheckDialog::validLostCheck()
+{
+    if(lostCheck.value("SHIFT_ID").toInt()==0){
+        QMessageBox::critical(0, qApp->tr("Ошибка"),
+                              QString("Не выбрана смена!"));
+        return false;
+    }
+    if(lostCheck.value("PAYTYPE_ID").toInt() == -1){
+        QMessageBox::critical(0, qApp->tr("Ошибка"),
+                              QString("Не выбран вид оплаты!"));
+        return false;
+    }
+    if(lostCheck.value("FUEL_ID").toInt() == -1){
+        QMessageBox::critical(0, qApp->tr("Ошибка"),
+                              QString("Не выбран вид топлива!"));
+        return false;
+    }
+    if(lostCheck.value("DISPENSER_ID").toInt() == -1){
+        QMessageBox::critical(0, qApp->tr("Ошибка"),
+                              QString("Не выбрана ТРК!"));
+        return false;
+    }
+    if(ui->lineEditPrice->text().toDouble()<=0){
+        QMessageBox::critical(0, qApp->tr("Ошибка"),
+                              QString("Не указана цена топлива!"));
+        return false;
+    }
+    if(ui->lineEditGive->text().toDouble()<=0){
+        QMessageBox::critical(0, qApp->tr("Ошибка"),
+                              QString("Не указан литраж!"));
+        return false;
+    }
+    if(ui->lineEditSum->text().toDouble()<=0){
+        QMessageBox::critical(0, qApp->tr("Ошибка"),
+                              QString("Не указана сумма!"));
+        return false;
+    }
+    if(ui->lineEditNumCheck->text().toInt()<=0){
+        QMessageBox::critical(0, qApp->tr("Ошибка"),
+                              QString("Не указан номер чека!"));
+        return false;
+    }
+
+    if(ui->lineEditClientInfo->isVisible()){
+        if(ui->lineEditClientCode->text().isEmpty()){
+            QMessageBox::critical(0, qApp->tr("Ошибка"),
+                                  QString("Не указан код клиента!"));
+            return false;
+        }
+        if(ui->lineEditClientInfo->text().isEmpty()){
+            QMessageBox::critical(0, qApp->tr("Ошибка"),
+                                  QString("Не указано описание клиента!"));
+            return false;
+        }
+    }
+
+    QSqlDatabase azs = QSqlDatabase::database(azsConnInfo.value("conName"));
+    QSqlQuery q = QSqlQuery(azs);
+
+    q.prepare("select COUNT(*) from MPOSCHECKS m WHERE m.SHIFT_ID=:shift and m.NUMBERCHECK=:checkNum");
+    q.bindValue(":shift",lostCheck.value("SHIFT_ID").toInt());
+    q.bindValue(":checkNum",ui->lineEditNumCheck->text().toInt());
+    q.exec();
+    q.next();
+    if(q.value(0).toInt()==1){
+        QMessageBox::critical(this, qApp->tr("Ошибка"),
+                              QString("Чек с указанным номером уже есть в протоколе продаж!"));
+        return false;
+    }
+
+
+    return true;
+
+}
+
+void LostCheckDialog::on_pushButtonRunScript_clicked()
+{
+    generateScript();
+}
+
+void LostCheckDialog::on_pushButtonSaveScript_clicked()
+{
+    generateScript();
 }

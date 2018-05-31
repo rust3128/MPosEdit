@@ -22,6 +22,7 @@ public:
 signals:
     void getPrice();                //установка цены
     void calcSumm();                //Вычимлить сумму
+
 private slots:
     void on_lineEditTerminalID_textChanged(const QString &arg1);
 
@@ -36,10 +37,13 @@ private slots:
     void setPrice();                    //Установка цены в поле ввода
     void setSumm();                     //Расчет суммы
     void on_lineEditPrice_textChanged();
-
     void on_lineEditGive_textChanged();
-
     void on_pushButtonChecAzs_clicked();
+
+
+    void on_pushButtonRunScript_clicked();
+
+    void on_pushButtonSaveScript_clicked();
 
 private:
     void createUI();
@@ -53,6 +57,8 @@ private:
     void azsConnections();              //Подключение к базе данных АЗС
     void showClientsInfo(bool sh);      //Отображение или скрытие информации о клиенте
     void initLostCheck();               //Инициализации структуры
+    void generateScript();              //Генерация скрипта
+    bool validLostCheck();              //Валидация данных для скрипта
 private:
     Ui::LostCheckDialog *ui;
     QMap<QString, QVariant> lostCheck;  //Контейнер данных для формирования скрипта
