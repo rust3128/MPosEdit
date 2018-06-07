@@ -9,6 +9,10 @@
 #include <QDateTime>
 #include <QValidator>
 #include <QMessageBox>
+#include <QFile>
+#include <QTextStream>
+#include <QDir>
+#include <QFileDialog>
 
 
 LostCheckDialog::LostCheckDialog(int user_id, QWidget *parent) :
@@ -390,18 +394,79 @@ void LostCheckDialog::generateScript()
     lostCheck["GIVE"] = lostCheck["ORDERED"] = ui->lineEditGive->text().toDouble();
     lostCheck["SUMMA"]=ui->lineEditSum->text().toDouble();
     lostCheck["DAT"]=ui->dateTimeCheck->dateTime().toString("yyyy/MM/dd hh:mm:ss");
+    lostCheck["PRICE"]=ui->lineEditPrice->text().toDouble();
     if(ui->lineEditClientInfo->isVisible()){
         lostCheck["INFO_CODE"]=ui->lineEditClientCode->text().toInt();
         lostCheck["INFO_TEXT"]=ui->lineEditClientInfo->text().trimmed();
     }
 
-    QMapIterator<QString, QVariant> i(lostCheck);
+//    QMapIterator<QString, QVariant> i(lostCheck);
+//    while (i.hasNext()) {
+//        i.next();
+//        qInfo(logInfo()) << i.key() << i.value().toString();
+//    }
+    script.clear();
+    strSQL.clear();
+    endScript.clear();
+
+    script << "CREATE OR ALTER PROCEDURE TMP_LOST_CHECK ";
+    script << "AS ";
+    script << "DECLARE VARIABLE CHECK_ID T_INT;";
+    script << "BEGIN ";
+    script << "CHECK_ID = GEN_ID(GEN_MPOSCHECKS, 1);";
+    script << "EXECUTE PROCEDURE APPEND_FSALE(";
+    script << QString("/*TERMINAL_ID - терминал*/                           %1,").arg(lostCheck.value("TERMINAL_ID").toString());
+    script << QString("/*SHIFT_ID - № смены*/                               %1,").arg(lostCheck.value("SHIFT_ID").toString());
+    script << QString("/*DISPENSER_ID - номер колонки*/                     %1,").arg(lostCheck.value("DISPENSER_ID").toString());
+    script << QString("/*TRK_ID - номер пистолета*/                         %1,").arg(lostCheck.value("TRK_ID").toString());
+    script << QString("/*TANK_ID - номер резервуара */                      %1,").arg(lostCheck.value("TANK_ID").toString());
+    script << QString("/*FUEL_ID - код топлива */                           %1,").arg(lostCheck.value("FUEL_ID").toString());
+    script << QString("/*GIVE - залито */                                   %1,").arg(lostCheck.value("GIVE").toString());
+    script << QString("/*ORDERED - заказано */                              %1,").arg(lostCheck.value("ORDERED").toString());
+    script << QString("/*SUMMA - сумма */                                   %1,").arg(lostCheck.value("SUMMA").toString());
+    script << QString("/*CASH - не трогать */                               %1,").arg(lostCheck.value("CASH").toString());
+    script << QString("/*DISCOUNTSUMMA - сумма скидки НЕ отрицательна */    %1,").arg(lostCheck.value("DISCOUNTSUMMA").toString());
+    script << QString("/*PAYTYPE_ID - вид оплаты*/                          %1,").arg(lostCheck.value("PAYTYPE_ID").toString());
+    script << QString("/*NUM_CHECK - номер чека */                          %1,").arg(lostCheck.value("NUM_CHECK").toString());
+    script << QString("/*NUM_CHECK_RETURN - номер чека возврата*/           %1,").arg(lostCheck.value("NUM_CHECK_RETURN").toString());
+    script << QString("/*TRANSACTION_ID - номер транзакции*/                %1,").arg(lostCheck.value("TRANSACTION_ID").toString());
+    script << QString("/* SEC - врем€ заправки в секундах*/                 %1,").arg(lostCheck.value("SEC").toString());
+    script << QString("/* ISLAST - не трогать */                           '%1',").arg(lostCheck.value("ISLAST").toString());
+    script << QString("/*INFO_CODE - код клиента*/                          %1,").arg(lostCheck.value("INFO_CODE").toString());
+    script << QString("/*INFO_TEXT - название клиента (номер карты)*/      '%1',").arg(lostCheck.value("INFO_TEXT").toString());
+    script << QString("/*POS_ID - не трогать*/                              %1,").arg(lostCheck.value("POS_ID").toString());
+    script << QString("/*ZNUMBER - № Z-отчета*/                             %1,").arg(lostCheck.value("ZNUMBER").toString());
+    script << QString("/*OPERATOR_ID - код оператора*/                      %1,").arg(lostCheck.value("OPERATOR_ID").toString());
+    script << QString("/*SALEORDER_ID - не трогать */                       %1,").arg(lostCheck.value("SALEORDER_ID").toString());
+    script << QString("/*PRICE - цена*/                                     %1,").arg(lostCheck.value("PRICE").toString());
+    script << QString("/*ISBEFOREPAY - предоплата*/                        '%1',").arg(lostCheck.value("ISBEFOREPAY").toString());
+    script << QString("/*POSTRANSACTION_ID*/                                %1,").arg(lostCheck.value("POSTRANSACTION_ID").toString());
+    script << QString("/*POSTRETURN_ID*/                                    %1,").arg(lostCheck.value("POSTRNRETURN_ID").toString());
+    script << QString("/*SHARE_ID*/                                         %1,").arg(lostCheck.value("SHARE_ID").toString());
+    script << QString("/*MPOSCHECK_ID*/                                     %1,").arg(lostCheck.value("MPOSCHECK_ID").toString());
+    script << QString("/*PAYTYPE_ID2 - вид оплаты*/                         %1,").arg(lostCheck.value("PAYTYPE_ID2").toString());
+    script << QString("/*SUMMA2 - сумма */                                  %1,").arg(lostCheck.value("SUMMA2").toString());
+    script << QString("/*DISCOUNTSUMMA2 - сумма скидки не отрицательная*/   %1,").arg(lostCheck.value("DISCOUNTSUMMA2").toString());
+    script << QString("/*DAT - дата/времz продажи*/                        '%1',").arg(lostCheck.value("DAT").toString());
+    script << QString("/*GOV_NUMBER*/                                      '%1',").arg(lostCheck.value("GOV_NUMBER").toString());
+    script << QString("/*BONUSCARD*/                                       '%1');").arg(lostCheck.value("BONUSCARD").toString());
+    script << "END;";
+
+    endScript << "EXECUTE PROCEDURE TMP_LOST_CHECK;";
+    endScript << "DROP PROCEDURE TMP_LOST_CHECK;";
+    endScript << "COMMIT WORK;";
+
+
+
+    qInfo(logInfo()) << script;
+    QString strTemp;
+    QListIterator<QString> i(script);
     while (i.hasNext()) {
-        i.next();
-        qInfo(logInfo()) << i.key() << i.value().toString();
+        strTemp = i.next();
+        strSQL += strTemp;
+        qInfo(logInfo()) << strTemp;
     }
-
-
+//    qInfo(logInfo()) <<strSQL;
 }
 
 bool LostCheckDialog::validLostCheck()
@@ -487,4 +552,30 @@ void LostCheckDialog::on_pushButtonRunScript_clicked()
 void LostCheckDialog::on_pushButtonSaveScript_clicked()
 {
     generateScript();
+    QString curPath = QDir::currentPath()+"//LostCheck";
+    QString fileNameLost = QString("Check_%1_%2.sql").arg(lostCheck.value("TERMINAL_ID").toString()).arg(lostCheck.value("NUM_CHECK").toString());
+
+    QDir dir(curPath);
+    if(!dir.exists()) {
+        dir.mkdir(curPath);
+    }
+    dir.cd(curPath);
+    QString fileName = QFileDialog::getSaveFileName(this,"Сохранить скрипт",curPath+"//"+fileNameLost,
+                                           "SQL file (*.sql);;Все файлы (*.*)");
+
+    QFile file(fileName);
+    file.open(QIODevice::WriteOnly);
+    QTextStream qout(&file);
+
+    QListIterator<QString> i(script);
+    while (i.hasNext()) {
+        qout << i.next() << endl;
+    }
+    QListIterator<QString> e(endScript);
+    while (e.hasNext()) {
+        qout << e.next() << endl;
+    }
+
+    file.close();
+
 }

@@ -73,6 +73,9 @@ private:
     QSqlQueryModel *modelTRK;           //Модель ТРК
     QTcpSocket  *tcpSocket;             //Проверка доступности FierBird
     QMap<QString, QString> azsConnInfo; //Параметры подключения к АЗС
+    QStringList script;                 //Скрипт процедуры
+    QStringList endScript;              //Команды завершения скрипта
+    QString strSQL;
 
 
 };
