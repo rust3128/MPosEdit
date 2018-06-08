@@ -38,7 +38,8 @@ SOURCES += \
     tanlemodelconnect.cpp \
     activatearticlesdialog.cpp \
     activatearticles.cpp \
-    lostcheckdialog.cpp
+    lostcheckdialog.cpp \
+    myfiledialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -57,7 +58,8 @@ HEADERS += \
     activatearticlesdialog.h \
     passconv.h \
     activatearticles.h \
-    lostcheckdialog.h
+    lostcheckdialog.h \
+    myfiledialog.h
 
 FORMS += \
         mainwindow.ui \

@@ -4,6 +4,7 @@
 #include "selectshiftdialog.h"
 #include "passconv.h"
 #include "insertlog.h"
+#include "myfiledialog.h"
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDateTime>
@@ -83,6 +84,7 @@ void LostCheckDialog::createUI()
     ui->lineEditNumCheck->setValidator(valTerminals);
 //    ui->lineEditGive->setValidator(valDouble);
 //    ui->lineEditPrice->setValidator(valDouble);
+
 
 
     ui->labelTerminalName->setText("Терминал не указан...");
@@ -286,7 +288,8 @@ void LostCheckDialog::showClientsInfo(bool sh)
         ui->labelClient->hide();
         ui->labelInfo->hide();
         ui->lineEditClientCode->hide();
-        ui->lineEditClientInfo->hide();
+        ui->lineEditClientInfo->hide();    ui->pushButtonRunScript->setEnabled(true);
+        ui->pushButtonSaveScript->setEnabled(true);
     } else {
         ui->labelClient->show();
         ui->labelInfo->show();
@@ -333,7 +336,8 @@ void LostCheckDialog::on_comboBoxFuels_activated(int idx)
 
 void LostCheckDialog::on_comboBoxTRK_activated(int idx)
 {
-    lostCheck["DISPENSER_ID"]=modelTRK->data(modelTRK->index(idx,0)).toInt();
+    lostCheck["DISPENSER_ID"]=modelTRK->data(modelTRK->index(idx,0)).toInt();    ui->pushButtonRunScript->setEnabled(true);
+    ui->pushButtonSaveScript->setEnabled(true);
     lostCheck["TRK_ID"]=modelTRK->data(modelTRK->index(idx,1)).toInt();
     ui->lineEditKran->setText(lostCheck.value("TRK_ID").toString());
 }
@@ -390,6 +394,9 @@ void LostCheckDialog::generateScript()
     if(!validLostCheck()){
         return;
     }
+
+
+
     lostCheck["NUM_CHECK"]=ui->lineEditNumCheck->text().toInt();
     lostCheck["GIVE"] = lostCheck["ORDERED"] = ui->lineEditGive->text().toDouble();
     lostCheck["SUMMA"]=ui->lineEditSum->text().toDouble();
@@ -400,11 +407,7 @@ void LostCheckDialog::generateScript()
         lostCheck["INFO_TEXT"]=ui->lineEditClientInfo->text().trimmed();
     }
 
-//    QMapIterator<QString, QVariant> i(lostCheck);
-//    while (i.hasNext()) {
-//        i.next();
-//        qInfo(logInfo()) << i.key() << i.value().toString();
-//    }
+
     script.clear();
     strSQL.clear();
     endScript.clear();
@@ -560,6 +563,15 @@ void LostCheckDialog::on_pushButtonSaveScript_clicked()
         dir.mkdir(curPath);
     }
     dir.cd(curPath);
+
+//    MyFileDialog *fileDialog = new MyFileDialog();
+//    fileDialog->show();
+//    fileDialog->exec();
+//    QString fileName = fileDialog->getSaveFileName(this,"Сохранить скрипт",curPath+"//"+fileNameLost,"SQL file (*.sql);;Все файлы (*.*)");
+
+
+
+
     QString fileName = QFileDialog::getSaveFileName(this,"Сохранить скрипт",curPath+"//"+fileNameLost,
                                            "SQL file (*.sql);;Все файлы (*.*)");
 
@@ -577,5 +589,6 @@ void LostCheckDialog::on_pushButtonSaveScript_clicked()
     }
 
     file.close();
+
 
 }
