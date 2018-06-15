@@ -39,7 +39,8 @@ SOURCES += \
     activatearticlesdialog.cpp \
     activatearticles.cpp \
     lostcheckdialog.cpp \
-    myfiledialog.cpp
+    myfiledialog.cpp \
+    lostcheckexecute.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -59,7 +60,8 @@ HEADERS += \
     passconv.h \
     activatearticles.h \
     lostcheckdialog.h \
-    myfiledialog.h
+    myfiledialog.h \
+    lostcheckexecute.h
 
 FORMS += \
         mainwindow.ui \

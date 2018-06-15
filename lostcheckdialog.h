@@ -5,6 +5,8 @@
 #include <QSqlQueryModel>
 #include <QTcpSocket>
 #include <QDate>
+#include "lostcheckexecute.h"
+#include <QThread>
 
 
 namespace Ui {
@@ -22,6 +24,7 @@ public:
 signals:
     void getPrice();                //установка цены
     void calcSumm();                //Вычимлить сумму
+    void sendScript(QStringList script);  //Передача скрипта в поток выполнения
 
 private slots:
     void on_lineEditTerminalID_textChanged(const QString &arg1);
@@ -39,11 +42,10 @@ private slots:
     void on_lineEditPrice_textChanged();
     void on_lineEditGive_textChanged();
     void on_pushButtonChecAzs_clicked();
-
-
     void on_pushButtonRunScript_clicked();
-
     void on_pushButtonSaveScript_clicked();
+    void startEcecute();                    //Начало выполнения скрипта
+    void finishExecute();                   //Завершение потока
 
 private:
     void createUI();
@@ -75,7 +77,10 @@ private:
     QMap<QString, QString> azsConnInfo; //Параметры подключения к АЗС
     QStringList script;                 //Скрипт процедуры
     QStringList endScript;              //Команды завершения скрипта
-    QString strSQL;
+    QString strSQL;                     //
+    bool validateData;
+    LostCheckExecute *lchExec;
+    QThread *thread;
 
 
 };

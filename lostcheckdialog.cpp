@@ -16,6 +16,7 @@
 #include <QFileDialog>
 
 
+
 LostCheckDialog::LostCheckDialog(int user_id, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LostCheckDialog)
@@ -92,6 +93,8 @@ void LostCheckDialog::createUI()
     ui->labelConnAviable->hide();
     ui->groupBoxShifts->hide();
     ui->pushButtonChecAzs->hide();
+    ui->frameExecute->hide();
+    ui->labelStatusExecute->hide();
     ui->dateTimeCheck->setDateTime(QDateTime::currentDateTime());
 
 }
@@ -392,8 +395,10 @@ void LostCheckDialog::on_pushButtonChecAzs_clicked()
 void LostCheckDialog::generateScript()
 {
     if(!validLostCheck()){
+        validateData=false;
         return;
     }
+    validateData=true;
 
 
 
@@ -461,14 +466,14 @@ void LostCheckDialog::generateScript()
 
 
 
-    qInfo(logInfo()) << script;
-    QString strTemp;
-    QListIterator<QString> i(script);
-    while (i.hasNext()) {
-        strTemp = i.next();
-        strSQL += strTemp;
-        qInfo(logInfo()) << strTemp;
-    }
+//    qInfo(logInfo()) << script;
+//    QString strTemp;
+//    QListIterator<QString> i(script);
+//    while (i.hasNext()) {
+//        strTemp = i.next();
+//        strSQL += strTemp;
+//        qInfo(logInfo()) << strTemp;
+//    }
 //    qInfo(logInfo()) <<strSQL;
 }
 
@@ -550,11 +555,47 @@ bool LostCheckDialog::validLostCheck()
 void LostCheckDialog::on_pushButtonRunScript_clicked()
 {
     generateScript();
+    if(!validateData)
+        return;
+    lchExec = new LostCheckExecute(azsConnInfo);
+    thread = new QThread(this);
+    connect(this,&LostCheckDialog::sendScript,lchExec,&LostCheckExecute::getScript);
+    emit sendScript(script);
+
+    connect(thread,&QThread::started,this,&LostCheckDialog::startEcecute);
+    connect(thread,&QThread::started,lchExec,&LostCheckExecute::lostCheckGo);
+    connect(thread,&QThread::finished,this,&LostCheckDialog::finishExecute);
+
+    connect(lchExec,&LostCheckExecute::finLostCheck,thread,&QThread::terminate,Qt::DirectConnection);
+
+
+    thread->start();
+    lchExec->moveToThread(thread);
+
 }
+
+
+void LostCheckDialog::startEcecute()
+{
+    ui->frameExecute->show();
+
+}
+
+void LostCheckDialog::finishExecute()
+{
+    ui->labelStatusExecute->setText("Чек успешно восстановлен!");
+    ui->progressBarExecute->hide();
+    ui->labelStatusExecute->show();
+}
+
+
 
 void LostCheckDialog::on_pushButtonSaveScript_clicked()
 {
     generateScript();
+    if(!validateData)
+        return;
+
     QString curPath = QDir::currentPath()+"//LostCheck";
     QString fileNameLost = QString("Check_%1_%2.sql").arg(lostCheck.value("TERMINAL_ID").toString()).arg(lostCheck.value("NUM_CHECK").toString());
 

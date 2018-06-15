@@ -133,11 +133,23 @@
    <addaction name="menuSettings"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="font">
+    <font>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(0, 0, 127);</string>
+   </property>
    <property name="iconSize">
     <size>
      <width>64</width>
      <height>64</height>
     </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
    <property name="floatable">
     <bool>true</bool>
@@ -169,6 +181,10 @@
    </property>
    <property name="text">
     <string>Удаление продажи</string>
+   </property>
+   <property name="iconText">
+    <string>Удаление
+продажи</string>
    </property>
    <property name="statusTip">
     <string>Обнуление транзакции в ЦБ</string>
@@ -211,6 +227,10 @@
    <property name="text">
     <string>Активность товара</string>
    </property>
+   <property name="iconText">
+    <string>Активность
+товара</string>
+   </property>
    <property name="statusTip">
     <string>Установка активности товара с не нулевым остатком</string>
    </property>
@@ -222,6 +242,10 @@
    </property>
    <property name="text">
     <string>Восстановление продажи</string>
+   </property>
+   <property name="iconText">
+    <string>Восстановление
+продажи</string>
    </property>
    <property name="statusTip">
     <string>Восстановление продажи</string>

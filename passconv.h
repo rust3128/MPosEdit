@@ -8,6 +8,8 @@ static QString passConv(QString str)
         return "sunoiladm";
     if(str == "juoesj8=")
         return "island15";
+    if(str == "hc}xwuu9;=")
+        return "gaztron123";
     return "masterkey";
 }
 
