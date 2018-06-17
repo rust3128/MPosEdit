@@ -612,13 +612,6 @@ font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonOtherAzs">
-       <property name="text">
-        <string>Другая АЗС</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="pushButtonClose">
        <property name="text">
         <string>Закрыть</string>

@@ -87,7 +87,7 @@ void LostCheckDialog::createUI()
 //    ui->lineEditPrice->setValidator(valDouble);
 
 
-
+    ui->lineEditTerminalID->clear();
     ui->labelTerminalName->setText("Терминал не указан...");
     ui->labelShiftData->setText("Смена не выбрана...");
     ui->labelConnAviable->hide();
@@ -557,6 +557,7 @@ void LostCheckDialog::on_pushButtonRunScript_clicked()
     generateScript();
     if(!validateData)
         return;
+
     lchExec = new LostCheckExecute(azsConnInfo);
     thread = new QThread(this);
     connect(this,&LostCheckDialog::sendScript,lchExec,&LostCheckExecute::getScript);
@@ -567,6 +568,7 @@ void LostCheckDialog::on_pushButtonRunScript_clicked()
     connect(thread,&QThread::finished,this,&LostCheckDialog::finishExecute);
 
     connect(lchExec,&LostCheckExecute::finLostCheck,thread,&QThread::terminate,Qt::DirectConnection);
+    connect(lchExec,&LostCheckExecute::sendExecStatus,this,&LostCheckDialog::getStatusExexc,Qt::DirectConnection);
 
 
     thread->start();
@@ -583,12 +585,36 @@ void LostCheckDialog::startEcecute()
 
 void LostCheckDialog::finishExecute()
 {
-    ui->labelStatusExecute->setText("Чек успешно восстановлен!");
+    if(statusExecute){
+        ui->labelStatusExecute->setText("Чек успешно восстановлен!");
+        QString strToLog;
+        QTextStream in(&strToLog, QIODevice::WriteOnly | QIODevice::Text);
+        QListIterator<QString> i(script);
+        while (i.hasNext()) {
+            in << i.next() << endl;
+        }
+        QListIterator<QString> e(endScript);
+        while (e.hasNext()) {
+            in << e.next() << endl;
+        }
+        insertLog(2, currentUser, lostCheck.value("TERMINAL_ID").toInt(), lostCheck.value("SHIFT_ID").toInt(),
+                  lostCheck.value("NUM_CHECK").toInt(), in.readAll() );
+
+    } else {
+        ui->labelStatusExecute->setText("Восстановить чек не удалось!");
+    }
+    ui->groupBoxShifts->hide();
+    ui->groupBoxTerminals->hide();
+    ui->pushButtonChecAzs->hide();
     ui->progressBarExecute->hide();
     ui->labelStatusExecute->show();
+
 }
 
-
+void LostCheckDialog::getStatusExexc(bool status)
+{
+    statusExecute = status;
+}
 
 void LostCheckDialog::on_pushButtonSaveScript_clicked()
 {
@@ -633,3 +659,9 @@ void LostCheckDialog::on_pushButtonSaveScript_clicked()
 
 
 }
+
+void LostCheckDialog::on_pushButtonClose_clicked()
+{
+    this->reject();
+}
+

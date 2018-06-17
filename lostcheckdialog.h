@@ -46,7 +46,8 @@ private slots:
     void on_pushButtonSaveScript_clicked();
     void startEcecute();                    //Начало выполнения скрипта
     void finishExecute();                   //Завершение потока
-
+    void getStatusExexc(bool status);       //Получение статусы выполнения
+    void on_pushButtonClose_clicked();
 private:
     void createUI();
     void createModelTerminals();        //Создание модели терминалов
@@ -61,6 +62,7 @@ private:
     void initLostCheck();               //Инициализации структуры
     void generateScript();              //Генерация скрипта
     bool validLostCheck();              //Валидация данных для скрипта
+
 private:
     Ui::LostCheckDialog *ui;
     QMap<QString, QVariant> lostCheck;  //Контейнер данных для формирования скрипта
@@ -81,7 +83,7 @@ private:
     bool validateData;
     LostCheckExecute *lchExec;
     QThread *thread;
-
+    bool statusExecute;                 //Статус выполнения скрипта
 
 };
 

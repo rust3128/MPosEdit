@@ -12,7 +12,7 @@ public:
 
 signals:
     void finLostCheck();            //Завершение операции
-    void sendExecStatus();          //Статус выполнения
+    void sendExecStatus(bool);          //Статус выполнения
 
 public slots:
     void lostCheckGo();             //Реализация скрипта
