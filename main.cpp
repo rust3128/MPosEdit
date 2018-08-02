@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QTranslator>
 #include <QLibraryInfo>
+#include <QDir>
 
 
 // Умный указатель на файл логирования
@@ -21,6 +22,8 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+
 
     // Устанавливаем файл логирования,
     // внимательно сверьтесь с тем, какой используете путь для файла

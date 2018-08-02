@@ -339,7 +339,8 @@ void LostCheckDialog::on_comboBoxFuels_activated(int idx)
 
 void LostCheckDialog::on_comboBoxTRK_activated(int idx)
 {
-    lostCheck["DISPENSER_ID"]=modelTRK->data(modelTRK->index(idx,0)).toInt();    ui->pushButtonRunScript->setEnabled(true);
+    lostCheck["DISPENSER_ID"]=modelTRK->data(modelTRK->index(idx,0)).toInt();
+    ui->pushButtonRunScript->setEnabled(true);
     ui->pushButtonSaveScript->setEnabled(true);
     lostCheck["TRK_ID"]=modelTRK->data(modelTRK->index(idx,1)).toInt();
     ui->lineEditKran->setText(lostCheck.value("TRK_ID").toString());
@@ -407,6 +408,7 @@ void LostCheckDialog::generateScript()
     lostCheck["SUMMA"]=ui->lineEditSum->text().toDouble();
     lostCheck["DAT"]=ui->dateTimeCheck->dateTime().toString("yyyy/MM/dd hh:mm:ss");
     lostCheck["PRICE"]=ui->lineEditPrice->text().toDouble();
+    lostCheck["DISCOUNTSUMMA"]=ui->lineEditDiscount->text().toDouble();
     if(ui->lineEditClientInfo->isVisible()){
         lostCheck["INFO_CODE"]=ui->lineEditClientCode->text().toInt();
         lostCheck["INFO_TEXT"]=ui->lineEditClientInfo->text().trimmed();
@@ -438,8 +440,8 @@ void LostCheckDialog::generateScript()
     script << QString("/*NUM_CHECK - номер чека */                          %1,").arg(lostCheck.value("NUM_CHECK").toString());
     script << QString("/*NUM_CHECK_RETURN - номер чека возврата*/           %1,").arg(lostCheck.value("NUM_CHECK_RETURN").toString());
     script << QString("/*TRANSACTION_ID - номер транзакции*/                %1,").arg(lostCheck.value("TRANSACTION_ID").toString());
-    script << QString("/* SEC - врем€ заправки в секундах*/                 %1,").arg(lostCheck.value("SEC").toString());
-    script << QString("/* ISLAST - не трогать */                           '%1',").arg(lostCheck.value("ISLAST").toString());
+    script << QString("/*SEC - врем€ заправки в секундах*/                  %1,").arg(lostCheck.value("SEC").toString());
+    script << QString("/*ISLAST - не трогать */                            '%1',").arg(lostCheck.value("ISLAST").toString());
     script << QString("/*INFO_CODE - код клиента*/                          %1,").arg(lostCheck.value("INFO_CODE").toString());
     script << QString("/*INFO_TEXT - название клиента (номер карты)*/      '%1',").arg(lostCheck.value("INFO_TEXT").toString());
     script << QString("/*POS_ID - не трогать*/                              %1,").arg(lostCheck.value("POS_ID").toString());
@@ -464,17 +466,6 @@ void LostCheckDialog::generateScript()
     endScript << "DROP PROCEDURE TMP_LOST_CHECK;";
     endScript << "COMMIT WORK;";
 
-
-
-//    qInfo(logInfo()) << script;
-//    QString strTemp;
-//    QListIterator<QString> i(script);
-//    while (i.hasNext()) {
-//        strTemp = i.next();
-//        strSQL += strTemp;
-//        qInfo(logInfo()) << strTemp;
-//    }
-//    qInfo(logInfo()) <<strSQL;
 }
 
 bool LostCheckDialog::validLostCheck()
@@ -552,6 +543,8 @@ bool LostCheckDialog::validLostCheck()
 
 }
 
+
+
 void LostCheckDialog::on_pushButtonRunScript_clicked()
 {
     generateScript();
@@ -621,7 +614,6 @@ void LostCheckDialog::on_pushButtonSaveScript_clicked()
     generateScript();
     if(!validateData)
         return;
-
     QString curPath = QDir::currentPath()+"//LostCheck";
     QString fileNameLost = QString("Check_%1_%2.sql").arg(lostCheck.value("TERMINAL_ID").toString()).arg(lostCheck.value("NUM_CHECK").toString());
 
@@ -635,9 +627,6 @@ void LostCheckDialog::on_pushButtonSaveScript_clicked()
 //    fileDialog->show();
 //    fileDialog->exec();
 //    QString fileName = fileDialog->getSaveFileName(this,"Сохранить скрипт",curPath+"//"+fileNameLost,"SQL file (*.sql);;Все файлы (*.*)");
-
-
-
 
     QString fileName = QFileDialog::getSaveFileName(this,"Сохранить скрипт",curPath+"//"+fileNameLost,
                                            "SQL file (*.sql);;Все файлы (*.*)");
@@ -657,7 +646,11 @@ void LostCheckDialog::on_pushButtonSaveScript_clicked()
 
     file.close();
 
-
+    ui->groupBoxShifts->hide();
+    ui->groupBoxTerminals->hide();
+    ui->pushButtonChecAzs->hide();
+    ui->progressBarExecute->hide();
+    ui->labelStatusExecute->show();
 }
 
 void LostCheckDialog::on_pushButtonClose_clicked()
@@ -665,3 +658,7 @@ void LostCheckDialog::on_pushButtonClose_clicked()
     this->reject();
 }
 
+void LostCheckDialog::on_comboBoxPoss_activated(int idx)
+{
+    lostCheck["POS_ID"]=modelPOSs->data(modelPOSs->index(idx,0)).toInt();
+}

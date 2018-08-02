@@ -116,6 +116,7 @@
      <string>Операции</string>
     </property>
     <addaction name="actionLostCheck"/>
+    <addaction name="actionEdit"/>
     <addaction name="actionClearSaleorders"/>
     <addaction name="actionActivateArticles"/>
     <addaction name="separator"/>
@@ -161,6 +162,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionLostCheck"/>
+   <addaction name="actionEdit"/>
    <addaction name="actionClearSaleorders"/>
    <addaction name="actionActivateArticles"/>
   </widget>
@@ -249,6 +251,19 @@
    </property>
    <property name="statusTip">
     <string>Восстановление продажи</string>
+   </property>
+  </action>
+  <action name="actionEdit">
+   <property name="icon">
+    <iconset resource="resourse.qrc">
+     <normaloff>:/Image/edit_data.png</normaloff>:/Image/edit_data.png</iconset>
+   </property>
+   <property name="text">
+    <string>Редактирование продажи</string>
+   </property>
+   <property name="iconText">
+    <string>Редактирование
+продажи</string>
    </property>
   </action>
  </widget>

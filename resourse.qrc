@@ -17,5 +17,6 @@
         <file>Image/golostcheck.png</file>
         <file>Image/sqlfile.png</file>
         <file>Image/azs.png</file>
+        <file>Image/edit_data.png</file>
     </qresource>
 </RCC>

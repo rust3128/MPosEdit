@@ -48,6 +48,8 @@ private slots:
     void finishExecute();                   //Завершение потока
     void getStatusExexc(bool status);       //Получение статусы выполнения
     void on_pushButtonClose_clicked();
+    void on_comboBoxPoss_activated(int idx);
+
 private:
     void createUI();
     void createModelTerminals();        //Создание модели терминалов
