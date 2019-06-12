@@ -35,6 +35,8 @@ private slots:
 
     void on_actionLostCheck_triggered();
 
+    void on_actionTime_triggered();
+
 private:
     void showLoginDialog();             //Отображение Диалога пользователя
     void createStatusBar();             //Создание строки состояния

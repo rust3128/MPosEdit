@@ -18,5 +18,6 @@
         <file>Image/sqlfile.png</file>
         <file>Image/azs.png</file>
         <file>Image/edit_data.png</file>
+        <file>Image/time.png</file>
     </qresource>
 </RCC>

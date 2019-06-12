@@ -24,6 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 win32: RC_ICONS = $$PWD/image/logo.ico
 
 SOURCES += \
+    changedatashiftdialog.cpp \
         main.cpp \
         mainwindow.cpp \
     loggingcategories.cpp \
@@ -43,6 +44,7 @@ SOURCES += \
     lostcheckexecute.cpp
 
 HEADERS += \
+    changedatashiftdialog.h \
         mainwindow.h \
     loggingcategories.h \
     logindialog.h \
@@ -64,6 +66,7 @@ HEADERS += \
     lostcheckexecute.h
 
 FORMS += \
+    changedatashiftdialog.ui \
         mainwindow.ui \
     logindialog.ui \
     connectioneditdialog.ui \

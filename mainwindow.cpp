@@ -9,6 +9,7 @@
 #include "usersdialog.h"
 #include "activatearticlesdialog.h"
 #include "lostcheckdialog.h"
+#include "changedatashiftdialog.h"
 #include <QMessageBox>
 #include <QDebug>
 #include <QSqlError>
@@ -203,4 +204,12 @@ void MainWindow::on_actionLostCheck_triggered()
     this->setCentralWidget(lostDlg);
     this->setWindowTitle(this->windowTitle()+"Восстановление продаж.");
     lostDlg->exec();
+}
+
+void MainWindow::on_actionTime_triggered()
+{
+    ChangeDataShiftDialog *timeDlg = new ChangeDataShiftDialog();
+    this->setCentralWidget(timeDlg);
+    this->setWindowTitle("MPosEtit. Изменение времени смены.");
+    timeDlg->exec();
 }

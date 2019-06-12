@@ -23,6 +23,7 @@ ClearSaleordersDialog::ClearSaleordersDialog(int user_id, QWidget *parent) :
     ui->groupBoxCheck->hide();
     createModelTerminals();
     currentUser = user_id;
+    createModelTerminals();
 }
 
 ClearSaleordersDialog::~ClearSaleordersDialog()
@@ -229,7 +230,7 @@ void ClearSaleordersDialog::on_pushButtonClear_clicked()
 
 
     if(!q.exec(strSql)) {
-        QMessageBox::critical(0, qApp->tr("Ошибка"),
+        QMessageBox::critical(this, qApp->tr("Ошибка"),
                               QString("Не возможно выблнить очистку транзакции\n"
                                       "Причина: %1"
                                       )
@@ -239,7 +240,7 @@ void ClearSaleordersDialog::on_pushButtonClear_clicked()
                          << "Чек №" << ui->lineEditNumCheck->text();
         return;
     }
-    QMessageBox::information(0, qApp->tr("Операция завершена"),
+    QMessageBox::information(this, qApp->tr("Операция завершена"),
                           QString("Очистка транзакции успешно произведена\n"));
     qInfo(logInfo()) << "Транзакция обнулена.";
     insertLog(1,currentUser,currentTerminal,currentShift,ui->lineEditNumCheck->text().toInt(),strUpdate);

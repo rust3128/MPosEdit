@@ -119,6 +119,7 @@
     <addaction name="actionEdit"/>
     <addaction name="actionClearSaleorders"/>
     <addaction name="actionActivateArticles"/>
+    <addaction name="actionTime"/>
     <addaction name="separator"/>
     <addaction name="actionProtokol"/>
    </widget>
@@ -165,6 +166,7 @@
    <addaction name="actionEdit"/>
    <addaction name="actionClearSaleorders"/>
    <addaction name="actionActivateArticles"/>
+   <addaction name="actionTime"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
@@ -264,6 +266,19 @@
    <property name="iconText">
     <string>Редактирование
 продажи</string>
+   </property>
+  </action>
+  <action name="actionTime">
+   <property name="icon">
+    <iconset resource="resourse.qrc">
+     <normaloff>:/Image/time.png</normaloff>:/Image/time.png</iconset>
+   </property>
+   <property name="text">
+    <string>Время закрытия смены</string>
+   </property>
+   <property name="iconText">
+    <string>Время
+закрытия смены</string>
    </property>
   </action>
  </widget>
