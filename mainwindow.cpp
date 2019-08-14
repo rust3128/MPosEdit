@@ -86,7 +86,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::selectCentralDB()
 {
-    int conCur;
+
     QSqlDatabase dblite = QSqlDatabase::database("options");
     modelConnect = new QSqlTableModel(this,dblite);
 
@@ -118,7 +118,7 @@ void MainWindow::setupUserInterface()
 {
     if(currentUser.value("user_id").toInt()!=1){
         ui->actionUsers->setEnabled(false);
-        ui->actionConnectionList->setEnabled(false);
+//        ui->actionConnectionList->setEnabled(false);
     }
 }
 

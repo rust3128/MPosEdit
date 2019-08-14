@@ -53,6 +53,7 @@ private:
     QSqlRecord currentUser;             //Текущий пользователь
     QSqlRecord centralDBInfo;           //Данные для подключения к центральной базе
     QSqlTableModel *modelConnect;       //Модель подключений
+    int conCur;
 
 };
 
