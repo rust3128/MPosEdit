@@ -73,6 +73,7 @@ void LostCheckDialog::initLostCheck()
     lostCheck.insert("DAT",0);
     lostCheck.insert("GOV_NUMBER","");
     lostCheck.insert("BONUSCARD","");
+    lostCheck.insert("SUBFUEL_ID","");
 }
 
 
@@ -459,7 +460,8 @@ void LostCheckDialog::generateScript()
     script << QString("/*DISCOUNTSUMMA2 - сумма скидки не отрицательная*/   %1,").arg(lostCheck.value("DISCOUNTSUMMA2").toString());
     script << QString("/*DAT - дата/времz продажи*/                        '%1',").arg(lostCheck.value("DAT").toString());
     script << QString("/*GOV_NUMBER*/                                      '%1',").arg(lostCheck.value("GOV_NUMBER").toString());
-    script << QString("/*BONUSCARD*/                                       '%1');").arg(lostCheck.value("BONUSCARD").toString());
+    script << QString("/*BONUSCARD*/                                       '%1',").arg(lostCheck.value("BONUSCARD").toString());
+    script << QString("/*SUBFUEL_ID - код топлива */                        %1);").arg(lostCheck.value("FUEL_ID").toString());
     script << "END;";
 
     endScript << "EXECUTE PROCEDURE TMP_LOST_CHECK;";

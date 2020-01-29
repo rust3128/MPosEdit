@@ -32,7 +32,7 @@ void LostCheckExecute::lostCheckGo()
     } else {
         QSqlQuery q = QSqlQuery(db);
         if(!q.exec(strSQL)){
-            qCritical(logCritical()) << "Не удалось выполнить скрипт генерации процедуры" ;
+            qCritical(logCritical()) << "Не удалось выполнить скрипт генерации процедуры" << q.lastError().text() ;
             execStatus = false;
         } else {
             q.exec("EXECUTE PROCEDURE TMP_LOST_CHECK;");
